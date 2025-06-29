@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Account - Greenland Bounty Investment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link href="../assets/css/auth.css" rel="stylesheet">
+    <link href="../assets/css/responsive.css" rel="stylesheet">
+</head>
+<body class="auth-body">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../index.html">
+                <i class="fas fa-seedling me-2"></i>
+                <span class="brand-text">Greenland Bounty</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="auth-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8 col-sm-10">
+                    <div class="auth-card">
+                        <div class="auth-header text-center">
+                            <div class="auth-logo">
+                                <i class="fas fa-shield-check"></i>
+                            </div>
+                            <h2>Verify Your Account</h2>
+                            <p class="text-muted">Complete the verification process to activate your account</p>
+                        </div>
+
+                        <!-- Verification Steps Progress -->
+                        <div class="verification-progress mb-4">
+                            <div class="progress-steps">
+                                <div class="step active" id="step1">
+                                    <div class="step-circle">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <span class="step-label">Email/Phone</span>
+                                </div>
+                                <div class="step" id="step2">
+                                    <div class="step-circle">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <span class="step-label">ID Upload</span>
+                                </div>
+                                <div class="step" id="step3">
+                                    <div class="step-circle">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                    <span class="step-label">Face Capture</span>
+                                </div>
+                                <div class="step" id="step4">
+                                    <div class="step-circle">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <span class="step-label">Pending</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Email/Phone Verification -->
+                        <div id="emailPhoneVerification" class="verification-step">
+                            <div class="text-center mb-4">
+                                <h4>Verify Your Contact</h4>
+                                <p class="text-muted">We've sent a verification code to <strong id="contactInfo"></strong></p>
+                            </div>
+
+                            <form id="contactVerificationForm" class="auth-form">
+                                <div class="form-group mb-3">
+                                    <label for="verificationCode" class="form-label">Verification Code</label>
+                                    <div class="otp-input-group">
+                                        <input type="text" class="form-control otp-input" maxlength="1" id="code1">
+                                        <input type="text" class="form-control otp-input" maxlength="1" id="code2">
+                                        <input type="text" class="form-control otp-input" maxlength="1" id="code3">
+                                        <input type="text" class="form-control otp-input" maxlength="1" id="code4">
+                                        <input type="text" class="form-control otp-input" maxlength="1" id="code5">
+                                        <input type="text" class="form-control otp-input" maxlength="1" id="code6">
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+
+                                <!-- Resend Code -->
+                                <div class="text-center mb-3">
+                                    <span class="text-muted">Didn't receive the code?</span>
+                                    <button type="button" class="btn btn-link p-0 ms-1" id="resendContactCodeBtn">
+                                        Resend Code
+                                    </button>
+                                    <div id="contactResendTimer" class="text-muted small mt-1" style="display: none;">
+                                        Resend in <span id="contactTimerCount">60</span> seconds
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+                                    <span class="btn-text">Verify Contact</span>
+                                    <span class="btn-spinner spinner-border spinner-border-sm d-none" role="status"></span>
+                                </button>
+
+                                <div id="contactVerifyError" class="alert alert-danger d-none" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <span id="contactErrorMessage"></span>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Step 2: ID Upload -->
+                        <div id="idUploadVerification" class="verification-step d-none">
+                            <div class="text-center mb-4">
+                                <h4>Upload Government ID</h4>
+                                <p class="text-muted">Please upload a clear photo of your government-issued ID</p>
+                            </div>
+
+                            <form id="idUploadForm" class="auth-form">
+                                <div class="form-group mb-3">
+                                    <label for="idType" class="form-label">ID Type</label>
+                                    <select class="form-select" id="idType" name="idType" required>
+                                        <option value="">Select ID Type</option>
+                                        <option value="national_id">National ID Card</option>
+                                        <option value="drivers_license">Driver's License</option>
+                                        <option value="passport">International Passport</option>
+                                        <option value="voters_card">Voter's Card</option>
+                                    </select>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="idUpload" class="form-label">Upload ID Document</label>
+                                    <div class="upload-area" id="idUploadArea">
+                                        <input type="file" class="form-control d-none" id="idUpload" name="idUpload" 
+                                               accept="image/*,.pdf" required>
+                                        <div class="upload-placeholder">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                            <p class="mb-2">Click to upload or drag and drop</p>
+                                            <small class="text-muted">Supported formats: JPG, PNG, PDF (Max 5MB)</small>
+                                        </div>
+                                        <div class="upload-preview d-none">
+                                            <img id="idPreview" src="" alt="ID Preview" class="img-thumbnail">
+                                            <div class="upload-info mt-2">
+                                                <span id="fileName"></span>
+                                                <button type="button" class="btn btn-sm btn-outline-danger ms-2" id="removeId">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+
+                                <div class="alert alert-info" role="alert">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Tips for best results:</strong><br>
+                                    • Ensure all text is clearly visible<br>
+                                    • Use good lighting<br>
+                                    • Avoid glare or shadows<br>
+                                    • Make sure the ID is not expired
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+                                    <span class="btn-text">Upload ID</span>
+                                    <span class="btn-spinner spinner-border spinner-border-sm d-none" role="status"></span>
+                                </button>
+
+                                <div id="idUploadError" class="alert alert-danger d-none" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <span id="idErrorMessage"></span>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Step 3: Face Capture -->
+                        <div id="faceCaptureVerification" class="verification-step d-none">
+                            <div class="text-center mb-4">
+                                <h4>Capture Your Photo</h4>
+                                <p class="text-muted">Take a clear photo of yourself for identity verification</p>
+                            </div>
+
+                            <form id="faceCaptureForm" class="auth-form">
+                                <div class="camera-container mb-3">
+                                    <div class="camera-box">
+                                        <video id="cameraFeed" autoplay muted playsinline style="display: none;"></video>
+                                        <canvas id="captureCanvas" style="display: none;"></canvas>
+                                        <div id="cameraPlaceholder" class="camera-placeholder">
+                                            <i class="fas fa-camera fa-3x text-muted mb-3"></i>
+                                            <p>Click "Start Camera" to begin</p>
+                                        </div>
+                                        <div id="capturedPhoto" class="captured-photo d-none">
+                                            <img id="photoPreview" src="" alt="Captured Photo" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="camera-controls text-center mb-3">
+                                    <button type="button" class="btn btn-outline-success me-2" id="startCameraBtn">
+                                        <i class="fas fa-video me-1"></i> Start Camera
+                                    </button>
+                                    <button type="button" class="btn btn-success me-2 d-none" id="captureBtn">
+                                        <i class="fas fa-camera me-1"></i> Capture Photo
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary d-none" id="retakeBtn">
+                                        <i class="fas fa-redo me-1"></i> Retake
+                                    </button>
+                                </div>
+
+                                <div class="alert alert-info" role="alert">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Photo Guidelines:</strong><br>
+                                    • Look directly at the camera<br>
+                                    • Ensure your face is well-lit<br>
+                                    • Remove sunglasses or hats<br>
+                                    • Keep a neutral expression
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-lg w-100 mb-3 d-none" id="submitPhotoBtn">
+                                    <span class="btn-text">Submit Photo</span>
+                                    <span class="btn-spinner spinner-border spinner-border-sm d-none" role="status"></span>
+                                </button>
+
+                                <div id="faceCaptureError" class="alert alert-danger d-none" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <span id="faceErrorMessage"></span>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Step 4: Pending Approval -->
+                        <div id="pendingApproval" class="verification-step d-none">
+                            <div class="text-center">
+                                <div class="pending-icon mb-4">
+                                    <i class="fas fa-clock fa-4x text-warning"></i>
+                                </div>
+                                <h4>Verification Submitted</h4>
+                                <p class="text-muted mb-4">
+                                    Thank you for completing the verification process. Your account is now pending admin approval.
+                                </p>
+                                
+                                <div class="alert alert-info" role="alert">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>What happens next?</strong><br>
+                                    • Our team will review your documents within 24-48 hours<br>
+                                    • You'll receive an email notification once approved<br>
+                                    • You can then access your dashboard and start using the platform
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <a href="../index.html" class="btn btn-success btn-lg">
+                                        <i class="fas fa-home me-2"></i>
+                                        Return to Homepage
+                                    </a>
+                                    <a href="login.html" class="btn btn-outline-success">
+                                        <i class="fas fa-sign-in-alt me-2"></i>
+                                        Try Login Later
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="auth-footer-bottom bg-dark text-light py-3">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 Greenland Bounty Investment. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links">
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/face-capture.js"></script>
+    
+    <script>
+        // Initialize verification functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get URL parameters to determine verification type and contact info
+            const urlParams = new URLSearchParams(window.location.search);
+            const verifyType = urlParams.get('type') || 'email'; // email or phone
+            const contact = urlParams.get('contact') || 'example@email.com';
+            
+            // Set contact info
+            document.getElementById('contactInfo').textContent = contact;
+            
+            // Current step tracking
+            let currentStep = 1;
+            let capturedPhotoData = null;
+            let cameraStream = null;
+            
+            // Form elements
+            const contactForm = document.getElementById('contactVerificationForm');
+            const idUploadForm = document.getElementById('idUploadForm');
+            const faceCaptureForm = document.getElementById('faceCaptureForm');
+            
+            // OTP inputs
+            const otpInputs = document.querySelectorAll('.otp-input');
+            
+            // Camera elements
+            const video = document.getElementById('cameraFeed');
+            const canvas = document.getElementById('captureCanvas');
+            const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+            const capturedPhoto = document.getElementById('capturedPhoto');
+            const photoPreview = document.getElementById('photoPreview');
+            
+            // Camera controls
+            const startCameraBtn = document.getElementById('startCameraBtn');
+            const captureBtn = document.getElementById('captureBtn');
+            const retakeBtn = document.getElementById('retakeBtn');
+            const submitPhotoBtn = document.getElementById('submitPhotoBtn');
+            
+            // File upload elements
+            const idUploadArea = document.getElementById('idUploadArea');
+            const idUploadInput = document.getElementById('idUpload');
+            const uploadPlaceholder = idUploadArea.querySelector('.upload-placeholder');
+            const uploadPreview = idUploadArea.querySelector('.upload-preview');
+            const idPreview = document.getElementById('idPreview');
+            const fileName = document.getElementById('fileName');
+            const removeIdBtn = document.getElementById('removeId');
+            
+            // Initialize OTP input handling
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', function() {
+                    if (this.value.length === 1 && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+                });
+                
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+            });
+            
+            // Step 1: Contact verification
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const otpValue = Array.from(otpInputs).map(input => input.value).join('');
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const btnText = submitBtn.querySelector('.btn-text');
+                const btnSpinner = submitBtn.querySelector('.btn-spinner');
+                const errorDiv = document.getElementById('contactVerifyError');
+                const errorMessage = document.getElementById('contactErrorMessage');
+                
+                if (otpValue.length !== 6) {
+                    showError(errorDiv, errorMessage, 'Please enter the complete 6-digit code');
+                    return;
+                }
+                
+                // Show loading state
+                showLoadingState(submitBtn, btnText, btnSpinner, 'Verifying...');
+                errorDiv.classList.add('d-none');
+                
+                try {
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Move to next step
+                                        // Move to next step
+                    currentStep = 2;
+                    updateProgressSteps();
+                    document.getElementById('emailPhoneVerification').classList.add('d-none');
+                    document.getElementById('idUploadVerification').classList.remove('d-none');
+                    
+                    // Reset form
+                    otpInputs.forEach(input => input.value = '');
+                    resetButtonState(submitBtn, btnText, btnSpinner, 'Verify Contact');
+                    
+                    // Start resend timer for ID upload (simulation)
+                    startResendTimer('contactResendTimer', 'contactTimerCount', 60);
+                    
+                } catch (error) {
+                    showError(errorDiv, errorMessage, 'Verification failed. Please check the code and try again.');
+                    resetButtonState(submitBtn, btnText, btnSpinner, 'Verify Contact');
+                }
+            });
+            
+            // Resend code button
+            document.getElementById('resendContactCodeBtn').addEventListener('click', function() {
+                const timerDiv = document.getElementById('contactResendTimer');
+                const errorDiv = document.getElementById('contactVerifyError');
+                const errorMessage = document.getElementById('contactErrorMessage');
+                
+                // Simulate resend
+                showSuccessMessage('New verification code sent!');
+                startResendTimer('contactResendTimer', 'contactTimerCount', 60);
+                
+                // Disable button and show timer
+                this.disabled = true;
+                timerDiv.style.display = 'block';
+            });
+            
+            // Step 2: ID Upload
+            idUploadInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // Validate file
+                const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                
+                if (!validTypes.includes(file.type)) {
+                    showError(document.getElementById('idUploadError'), 
+                              document.getElementById('idErrorMessage'), 
+                              'Invalid file type. Please upload JPG, PNG, or PDF.');
+                    return;
+                }
+                
+                if (file.size > maxSize) {
+                    showError(document.getElementById('idUploadError'), 
+                              document.getElementById('idErrorMessage'), 
+                              'File too large. Maximum size is 5MB.');
+                    return;
+                }
+                
+                // Display preview
+                uploadPlaceholder.classList.add('d-none');
+                uploadPreview.classList.remove('d-none');
+                fileName.textContent = file.name;
+                
+                if (file.type.includes('image')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        idPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    idPreview.src = '../assets/images/pdf-icon.png';
+                }
+            });
+            
+            // Remove ID button
+            removeIdBtn.addEventListener('click', function() {
+                idUploadInput.value = '';
+                uploadPlaceholder.classList.remove('d-none');
+                uploadPreview.classList.add('d-none');
+            });
+            
+            // Drag and drop for ID upload
+            idUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+            
+            idUploadArea.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+            
+            idUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                if (e.dataTransfer.files.length) {
+                    idUploadInput.files = e.dataTransfer.files;
+                    const event = new Event('change');
+                    idUploadInput.dispatchEvent(event);
+                }
+            });
+            
+            // ID Upload form submission
+            idUploadForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const btnText = submitBtn.querySelector('.btn-text');
+                const btnSpinner = submitBtn.querySelector('.btn-spinner');
+                const errorDiv = document.getElementById('idUploadError');
+                const errorMessage = document.getElementById('idErrorMessage');
+                
+                if (!idUploadInput.files.length) {
+                    showError(errorDiv, errorMessage, 'Please upload your ID document');
+                    return;
+                }
+                
+                // Show loading state
+                showLoadingState(submitBtn, btnText, btnSpinner, 'Uploading...');
+                errorDiv.classList.add('d-none');
+                
+                try {
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Move to next step
+                    currentStep = 3;
+                    updateProgressSteps();
+                    document.getElementById('idUploadVerification').classList.add('d-none');
+                    document.getElementById('faceCaptureVerification').classList.remove('d-none');
+                    
+                    // Reset form
+                    resetButtonState(submitBtn, btnText, btnSpinner, 'Upload ID');
+                    
+                } catch (error) {
+                    showError(errorDiv, errorMessage, 'Upload failed. Please try again.');
+                    resetButtonState(submitBtn, btnText, btnSpinner, 'Upload ID');
+                }
+            });
+            
+            // Step 3: Face Capture
+            startCameraBtn.addEventListener('click', async function() {
+                try {
+                    // Request camera access
+                    cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            width: 640, 
+                            height: 480,
+                            facingMode: 'user' 
+                        }, 
+                        audio: false 
+                    });
+                    
+                    // Show video feed
+                    video.srcObject = cameraStream;
+                    video.style.display = 'block';
+                    cameraPlaceholder.style.display = 'none';
+                    startCameraBtn.classList.add('d-none');
+                    captureBtn.classList.remove('d-none');
+                    
+                } catch (error) {
+                    const errorDiv = document.getElementById('faceCaptureError');
+                    const errorMessage = document.getElementById('faceErrorMessage');
+                    showError(errorDiv, errorMessage, 'Could not access camera. Please ensure you have granted permission.');
+                    console.error('Camera error:', error);
+                }
+            });
+            
+            // Capture photo button
+            captureBtn.addEventListener('click', function() {
+                // Set canvas dimensions to match video
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                // Draw video frame to canvas
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Get image data and display
+                capturedPhotoData = canvas.toDataURL('image/jpeg');
+                photoPreview.src = capturedPhotoData;
+                
+                // Show captured photo and controls
+                capturedPhoto.classList.remove('d-none');
+                video.style.display = 'none';
+                captureBtn.classList.add('d-none');
+                retakeBtn.classList.remove('d-none');
+                submitPhotoBtn.classList.remove('d-none');
+            });
+            
+            // Retake photo button
+            retakeBtn.addEventListener('click', function() {
+                capturedPhoto.classList.add('d-none');
+                video.style.display = 'block';
+                retakeBtn.classList.add('d-none');
+                submitPhotoBtn.classList.add('d-none');
+                captureBtn.classList.remove('d-none');
+            });
+            
+            // Submit photo button
+            faceCaptureForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!capturedPhotoData) {
+                    const errorDiv = document.getElementById('faceCaptureError');
+                    const errorMessage = document.getElementById('faceErrorMessage');
+                    showError(errorDiv, errorMessage, 'Please capture your photo first');
+                    return;
+                }
+                
+                const submitBtn = document.getElementById('submitPhotoBtn');
+                const btnText = submitBtn.querySelector('.btn-text');
+                const btnSpinner = submitBtn.querySelector('.btn-spinner');
+                const errorDiv = document.getElementById('faceCaptureError');
+                const errorMessage = document.getElementById('faceErrorMessage');
+                
+                // Show loading state
+                showLoadingState(submitBtn, btnText, btnSpinner, 'Submitting...');
+                errorDiv.classList.add('d-none');
+                
+                try {
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Move to next step
+                    currentStep = 4;
+                    updateProgressSteps();
+                    document.getElementById('faceCaptureVerification').classList.add('d-none');
+                    document.getElementById('pendingApproval').classList.remove('d-none');
+                    
+                    // Reset form and stop camera
+                    resetButtonState(submitBtn, btnText, btnSpinner, 'Submit Photo');
+                    if (cameraStream) {
+                        cameraStream.getTracks().forEach(track => track.stop());
+                    }
+                    
+                } catch (error) {
+                    showError(errorDiv, errorMessage, 'Submission failed. Please try again.');
+                    resetButtonState(submitBtn, btnText, btnSpinner, 'Submit Photo');
+                }
+            });
+            
+            // Helper function to update progress steps
+            function updateProgressSteps() {
+                document.querySelectorAll('.step').forEach((step, index) => {
+                    if (index + 1 < currentStep) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index + 1 === currentStep) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+            }
+            
+            // Helper function to show loading state
+            function showLoadingState(button, textElement, spinnerElement, loadingText) {
+                textElement.textContent = loadingText;
+                spinnerElement.classList.remove('d-none');
+                button.disabled = true;
+            }
+            
+            // Helper function to reset button state
+            function resetButtonState(button, textElement, spinnerElement, defaultText) {
+                textElement.textContent = defaultText;
+                spinnerElement.classList.add('d-none');
+                button.disabled = false;
+            }
+            
+            // Helper function to show error
+            function showError(errorDiv, errorMessageElement, message) {
+                errorMessageElement.textContent = message;
+                errorDiv.classList.remove('d-none');
+            }
+            
+            // Helper function to show success message
+            function showSuccessMessage(message) {
+                const toast = document.createElement('div');
+                toast.className = 'verification-toast';
+                toast.innerHTML = `
+                    <div class="toast-body">
+                        <i class="fas fa-check-circle me-2"></i>
+                        ${message}
+                    </div>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        setTimeout(() => {
+                            document.body.removeChild(toast);
+                        }, 300);
+                    }, 3000);
+                }, 100);
+            }
+            
+            // Helper function for resend timer
+            function startResendTimer(timerId, countId, seconds) {
+                const timerDiv = document.getElementById(timerId);
+                const countSpan = document.getElementById(countId);
+                const resendBtn = document.getElementById('resendContactCodeBtn');
+                
+                timerDiv.style.display = 'block';
+                resendBtn.disabled = true;
+                
+                let countdown = seconds;
+                countSpan.textContent = countdown;
+                
+                const timer = setInterval(() => {
+                    countdown--;
+                    countSpan.textContent = countdown;
+                    
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        timerDiv.style.display = 'none';
+                        resendBtn.disabled = false;
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

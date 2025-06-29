@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Greenland Bounty</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-green: #2E7D32;
+            --secondary-green: #4CAF50;
+            --accent-gold: #FFC107;
+            --earth-brown: #8D6E63;
+            --light-beige: #F5F5DC;
+            --dark-text: #2C2C2C;
+            --light-text: #666666;
+            --success-green: #28a745;
+            --error-red: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--light-beige) 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .signup-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .signup-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .signup-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .signup-header p {
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        .progress-container {
+            padding: 1.5rem 2rem 0;
+            background: white;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e9ecef;
+            z-index: 1;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 2px;
+            background: var(--primary-green);
+            transition: width 0.3s ease;
+            z-index: 2;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: var(--success-green);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            text-align: center;
+            color: var(--light-text);
+            max-width: 80px;
+        }
+
+        .step.active .step-label {
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+
+        .form-container {
+            padding: 2rem;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+        }
+
+        .form-control.is-valid {
+            border-color: var(--success-green);
+        }
+
+        .form-control.is-invalid {
+            border-color: var(--error-red);
+        }
+
+        .invalid-feedback,
+        .valid-feedback {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .account-type-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .account-type {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .account-type:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .account-type.selected {
+            border-color: var(--primary-green);
+            background: rgba(46, 125, 50, 0.05);
+        }
+
+        .account-type-icon {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .account-type h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+
+        .account-type p {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 0;
+        }
+
+        .file-upload {
+            border: 2px dashed #e9ecef;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-green);
+            background: rgba(46, 125, 50, 0.05);
+        }
+
+        .file-upload.dragover {
+            border-color: var(--primary-green);
+            background: rgba(46, 125, 50, 0.1);
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-subtext {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success-green);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .face-capture-container {
+            text-align: center;
+            padding: 2rem;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            background: #f8f9fa;
+        }
+
+        .camera-preview {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            border-radius: 15px;
+            background: #000;
+            margin: 1rem auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .camera-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-preview canvas {
+            display: none;
+        }
+
+        .capture-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 250px;
+            border: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .captured-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+            margin: 1rem auto;
+        }
+
+        .btn-capture {
+            background: var(--accent-gold);
+            border: none;
+            color: var(--dark-text);
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .btn-capture:hover {
+            background: #FFB300;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn-nav {
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-prev {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-prev:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-next {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #1B5E20;
+            transform: translateY(-2px);
+        }
+
+        .btn-submit {
+            background: var(--accent-gold);
+            color: var(--dark-text);
+        }
+
+        .btn-submit:hover {
+            background: #FFB300;
+            transform: translateY(-2px);
+        }
+
+        .verification-step {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .verification-icon {
+            font-size: 4rem;
+            color: var(--success-green);
+            margin-bottom: 1rem;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .otp-input:focus {
+            border-color: var(--primary-green);
+            outline: none;
+        }
+
+        .resend-timer {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-top: 1rem;
+        }
+
+        .loading-spinner {
+            display: none;
+            margin: 0 auto;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-green);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .signup-container {
+                margin: 1rem;
+                border-radius: 15px;
+            }
+            
+            .progress-steps {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .step-label {
+                font-size: 0.7rem;
+                max-width: 60px;
+            }
+            
+            .account-type-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn-nav {
+                width: 100%;
+            }
+            
+            .camera-preview {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <!-- Header -->
+        <div class="signup-header">
+            <h1><i class="fas fa-seedling me-2"></i>Join Greenland Bounty</h1>
+            <p>Create your account and start your agricultural journey</p>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-line" id="progressLine"></div>
+                
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Account Type</div>
+                </div>
+                
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Personal Info</div>
+                </div>
+                
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">ID Upload</div>
+                </div>
+                
+                <div class="step" id="step4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Face Capture</div>
+                </div>
+                
+                <div class="step" id="step5">
+                    <div class="step-number">5</div>
+                    <div class="step-label">Verification</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <form id="signupForm" novalidate>
+                <!-- Step 1: Account Type Selection -->
+                <div class="step-content active" id="stepContent1">
+                    <h3 class="mb-4">Choose Your Account Type</h3>
+                    
+                    <div class="account-type-selector">
+                        <div class="account-type" data-type="farmer">
+                            <div class="account-type-icon">
+                                <i class="fas fa-tractor"></i>
+                            </div>
+                            <h4>Farmer Account</h4>
+                            <p>List products, manage orders, apply for loans</p>
+                        </div>
+                        
+                        <div class="account-type" data-type="investor">
+                            <div class="account-type-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4>Investor Account</h4>
+                            <p>Save and invest in agricultural projects</p>
+                        </div>
+                        
+                        <div class="account-type" data-type="customer">
+                            <div class="account-type-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h4>Customer Account</h4>
+                            <p>Buy products, join events and programs</p>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="accountType" name="accountType" required>
+                    <div class="invalid-feedback">Please select an account type</div>
+                </div>
+
+                <!-- Step 2: Personal Information -->
+                <div class="step-content" id="stepContent2">
+                    <h3 class="mb-4">Personal Information</h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="firstName">First Name *</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                <div class="invalid-feedback">Please provide your first name</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="lastName">Last Name *</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                <div class="invalid-feedback">Please provide your last name</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address *</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="invalid-feedback">Please provide a valid email address</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Phone Number *</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                        <div class="invalid-feedback">Please provide a valid phone number</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="address">Full Address *</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                        <div class="invalid-feedback">Please provide your full address</div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="password">Password *</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="invalid-feedback">Password must be at least 8 characters</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="confirmPassword">Confirm Password *</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                <div class="invalid-feedback">Passwords do not match</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: ID Upload -->
+                <div class="step-content" id="stepContent3">
+                    <h3 class="mb-4">Upload Government ID</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Select ID Type *</label>
+                        <select class="form-control" id="idType" name="idType" required>
+                            <option value="">Choose ID Type</option>
+                            <option value="nin">National Identity Number (NIN)</option>
+                            <option value="drivers_license">Driver's License</option>
+                            <option value="voters_card">Voter's Card</option>
+                            <option value="passport">International Passport</option>
+                        </select>
+                        <div class="invalid-feedback">Please select an ID type</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Upload ID Document *</label>
+                        <div class="file-upload" id="idUpload">
+                            <div class="file-upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="file-upload-text">Click to upload or drag and drop</div>
+                            <div class="file-upload-subtext">PDF, JPG, PNG (Max 5MB)</div>
+                        </div>
+                        <input type="file" id="idFile" name="idFile" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
+                        <div class="invalid-feedback">Please upload your ID document</div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Face Capture -->
+                <div class="step-content" id="stepContent4">
+                    <h3 class="mb-4">Face Verification</h3>
+                    
+                    <div class="face-capture-container">
+                        <div id="cameraInstructions">
+                            <div style="font-size: 3rem; color: var(--primary-green); margin-bottom: 1rem;">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <h4>Take a Clear Photo of Your Face</h4>
+                            <p>Position your face within the circle and ensure good lighting</p>
+                            <button type="button" class="btn-capture" id="startCamera">
+                                <i class="fas fa-camera me-2"></i>Start Camera
+                            </button>
+                        </div>
+                        
+                        <div id="cameraContainer" style="display: none;">
+                            <div class="camera-preview">
+                                <video id="video" autoplay muted></video>
+                                <canvas id="canvas"></canvas>
+                                <div class="capture-overlay"></div>
+                            </div>
+                            <div class="mt-3">
+                                <button type="button" class="btn-capture" id="captureBtn">
+                                    <i class="fas fa-camera me-2"></i>Capture Photo
+                                </button>
+                                <button type="button" class="btn-capture" id="retakeBtn" style="display: none;">
+                                    <i class="fas fa-redo me-2"></i>Retake
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="capturedImageContainer" style="display: none;">
+                            <img id="capturedImage" class="captured-image" alt="Captured face">
+                            <div class="mt-2">
+                                <button type="button" class="btn-capture" id="retakeBtn2">
+                                    <i class="fas fa-redo me-2"></i>Retake Photo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="faceData" name="faceData" required>
+                    <div class="invalid-feedback">Please capture your face photo</div>
+                </div>
+
+                <!-- Step 5: Verification -->
+                <div class="step-content" id="stepContent5">
+                    <div class="verification-step">
+                        <div class="verification-icon">
+                            <i class="fas fa-envelope-open-text"></i>
+                        </div>
+                        <h3>Verify Your Email</h3>
+                        <p>We've sent a verification code to your email address. Please enter the 6-digit code below:</p>
+                        
+                        <div class="otp-inputs">
+                            <input type="text" class="otp-input" maxlength="1" data-index="0">
+                            <input type="text" class="otp-input" maxlength="1" data-index="1">
+                            <input type="text" class="otp-input" maxlength="1" data-index="2">
+                            <input type="text" class="otp-input" maxlength="1" data-index="3">
+                            <input type="text" class="otp-input" maxlength="1" data-index="4">
+                            <input type="text" class="otp-input" maxlength="1" data-index="5">
+                        </div>
+                        
+                        <div class="resend-timer">
+                            Didn't receive the code? 
+                            <button type="button" id="resendCode" class="btn btn-link p-0" style="color: var(--primary-green);">
+                                Resend Code
+                            </button>
+                            <span id="timer"></span>
+                        </div>
+                        
+                        <input type="hidden" id="otpCode" name="otpCode" required>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="navigation-buttons">
+                    <button type="button" class="btn-nav btn-prev" id="prevBtn" style="display: none;">
+                        <i class="fas fa-arrow-left me-2"></i>Previous
+                    </button>
+                    
+                    <div class="loading-spinner" id="loadingSpinner">
+                        <div class="spinner"></div>
+                    </div>
+                    
+                    <button type="button" class="btn-nav btn-next" id="nextBtn">
+                        Next<i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                    
+                    <button type="submit" class="btn-nav btn-submit" id="submitBtn" style="display: none;">
+                        <i class="fas fa-check me-2"></i>Complete Registration
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        class SignupWizard {
+            constructor() {
+                this.currentStep = 1;
+                this.totalSteps = 5;
+                this.formData = new FormData();
+                this.otpTimer = null;
+                this.otpCountdown = 60;
+                this.initializeEventListeners();
+                this.updateProgress();
+                
+                // Check for account type from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const accountType = urlParams.get('type');
+                if (accountType) {
+                    this.selectAccountType(accountType);
+                }
+            }
+
+            initializeEventListeners() {
+                // Account type selection
+                document.querySelectorAll('.account-type').forEach(type => {
+                    type.addEventListener('click', (e) => {
+                        document.querySelectorAll('.account-type').forEach(t => t.classList.remove('selected'));
+                        e.currentTarget.classList.add('selected');
+                        const selectedType = e.currentTarget.getAttribute('data-type');
+                        document.getElementById('accountType').value = selectedType;
+                    });
+                });
+
+                // Navigation buttons
+                document.getElementById('nextBtn').addEventListener('click', () => this.nextStep());
+                document.getElementById('prevBtn').addEventListener('click', () => this.prevStep());
+                document.getElementById('submitBtn').addEventListener('click', (e) => this.submitForm(e));
+
+                // Form validation
+                this.setupFormValidation();
+
+                // File upload
+                this.setupFileUpload();
+
+                // Face capture
+                this.setupFaceCapture();
+
+                // OTP handling
+                this.setupOTPInputs();
+
+                // Password validation
+                this.setupPasswordValidation();
+            }
+
+            selectAccountType(type) {
+                document.querySelectorAll('.account-type').forEach(t => t.classList.remove('selected'));
+                const selectedType = document.querySelector(`[data-type="${type}"]`);
+                if (selectedType) {
+                    selectedType.classList.add('selected');
+                    document.getElementById('accountType').value = type;
+                }
+            }
+
+            setupFormValidation() {
+                const inputs = document.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', () => this.validateField(input));
+                    input.addEventListener('input', () => this.clearFieldError(input));
+                });
+            }
+
+            setupPasswordValidation() {
+                const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('confirmPassword');
+
+                [password, confirmPassword].forEach(field => {
+                    field.addEventListener('input', () => {
+                        if (password.value && confirmPassword.value) {
+                            if (password.value !== confirmPassword.value) {
+                                confirmPassword.classList.add('is-invalid');
+                                confirmPassword.classList.remove('is-valid');
+                            } else {
+                                confirmPassword.classList.add('is-valid');
+                                confirmPassword.classList.remove('is-invalid');
+                            }
+                        }
+                    });
+                });
+            }
+
+            setupFileUpload() {
+                const fileUpload = document.getElementById('idUpload');
+                const fileInput = document.getElementById('idFile');
+
+                fileUpload.addEventListener('click', () => fileInput.click());
+                fileUpload.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    fileUpload.classList.add('dragover');
+                });
+                fileUpload.addEventListener('dragleave', () => {
+                    fileUpload.classList.remove('dragover');
+                });
+                                fileUpload.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    fileUpload.classList.remove('dragover');
+                    
+                    if (e.dataTransfer.files.length) {
+                        fileInput.files = e.dataTransfer.files;
+                        this.handleFileUpload(fileInput.files[0]);
+                    }
+                });
+
+                fileInput.addEventListener('change', () => {
+                    if (fileInput.files.length) {
+                        this.handleFileUpload(fileInput.files[0]);
+                    }
+                });
+            }
+
+            handleFileUpload(file) {
+                const fileUpload = document.getElementById('idUpload');
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+                
+                // Validate file type
+                if (!validTypes.includes(file.type)) {
+                    this.showFileUploadError('Invalid file type. Please upload PDF, JPG, or PNG.');
+                    return;
+                }
+                
+                // Validate file size
+                if (file.size > maxSize) {
+                    this.showFileUploadError('File too large. Max size is 5MB.');
+                    return;
+                }
+                
+                // Clear any previous errors
+                fileUpload.querySelector('.invalid-feedback').style.display = 'none';
+                
+                // Display uploaded file info
+                fileUpload.innerHTML = `
+                    <div class="uploaded-file">
+                        <div>
+                            <i class="fas fa-file-alt me-2"></i>
+                            <span>${file.name}</span>
+                        </div>
+                        <div>
+                            <span class="text-success">Uploaded</span>
+                            <button type="button" class="btn btn-link p-0 ms-2" id="removeFile">
+                                <i class="fas fa-times text-danger"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listener for remove button
+                document.getElementById('removeFile').addEventListener('click', () => {
+                    document.getElementById('idFile').value = '';
+                    this.resetFileUpload();
+                });
+                
+                // Add file to form data
+                this.formData.append('idFile', file);
+            }
+
+            showFileUploadError(message) {
+                const fileUpload = document.getElementById('idUpload');
+                const errorElement = document.createElement('div');
+                errorElement.className = 'text-danger mt-2';
+                errorElement.textContent = message;
+                fileUpload.appendChild(errorElement);
+                
+                // Remove error after 5 seconds
+                setTimeout(() => {
+                    errorElement.remove();
+                }, 5000);
+            }
+
+            resetFileUpload() {
+                const fileUpload = document.getElementById('idUpload');
+                fileUpload.innerHTML = `
+                    <div class="file-upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="file-upload-text">Click to upload or drag and drop</div>
+                    <div class="file-upload-subtext">PDF, JPG, PNG (Max 5MB)</div>
+                `;
+                
+                // Reattach event listeners
+                this.setupFileUpload();
+            }
+
+            setupFaceCapture() {
+                const startCameraBtn = document.getElementById('startCamera');
+                const captureBtn = document.getElementById('captureBtn');
+                const retakeBtn = document.getElementById('retakeBtn');
+                const retakeBtn2 = document.getElementById('retakeBtn2');
+                const video = document.getElementById('video');
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+                let stream = null;
+
+                startCameraBtn.addEventListener('click', async () => {
+                    try {
+                        stream = await navigator.mediaDevices.getUserMedia({ 
+                            video: { 
+                                width: { ideal: 1280 },
+                                height: { ideal: 720 },
+                                facingMode: 'user' 
+                            }, 
+                            audio: false 
+                        });
+                        
+                        video.srcObject = stream;
+                        document.getElementById('cameraInstructions').style.display = 'none';
+                        document.getElementById('cameraContainer').style.display = 'block';
+                    } catch (err) {
+                        console.error('Error accessing camera:', err);
+                        alert('Could not access the camera. Please ensure you have granted camera permissions.');
+                    }
+                });
+
+                captureBtn.addEventListener('click', () => {
+                    // Set canvas dimensions to match video
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    
+                    // Draw current video frame to canvas
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    // Stop camera stream
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                    
+                    // Hide camera and show captured image
+                    document.getElementById('cameraContainer').style.display = 'none';
+                    document.getElementById('capturedImageContainer').style.display = 'block';
+                    
+                    // Convert canvas to data URL and display
+                    const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    document.getElementById('capturedImage').src = imageDataUrl;
+                    document.getElementById('faceData').value = imageDataUrl;
+                    
+                    // Add to form data
+                    canvas.toBlob(blob => {
+                        this.formData.append('faceImage', blob, 'face_capture.jpg');
+                    }, 'image/jpeg', 0.8);
+                });
+
+                retakeBtn.addEventListener('click', () => this.resetFaceCapture());
+                retakeBtn2.addEventListener('click', () => this.resetFaceCapture());
+            }
+
+            resetFaceCapture() {
+                const video = document.getElementById('video');
+                
+                // Clear any existing stream
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                }
+                
+                // Reset UI
+                document.getElementById('capturedImageContainer').style.display = 'none';
+                document.getElementById('cameraContainer').style.display = 'none';
+                document.getElementById('cameraInstructions').style.display = 'block';
+                document.getElementById('faceData').value = '';
+            }
+
+            setupOTPInputs() {
+                const otpInputs = document.querySelectorAll('.otp-input');
+                const otpCode = document.getElementById('otpCode');
+                const resendBtn = document.getElementById('resendCode');
+                
+                // Auto-focus and move between inputs
+                otpInputs.forEach((input, index) => {
+                    input.addEventListener('input', (e) => {
+                        if (e.target.value.length === 1) {
+                            if (index < otpInputs.length - 1) {
+                                otpInputs[index + 1].focus();
+                            }
+                        }
+                    });
+                    
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                            otpInputs[index - 1].focus();
+                        }
+                    });
+                });
+                
+                // Update hidden input with full OTP
+                otpInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        const code = Array.from(otpInputs).map(i => i.value).join('');
+                        otpCode.value = code;
+                    });
+                });
+                
+                // Resend OTP
+                resendBtn.addEventListener('click', () => {
+                    this.startOTPTimer();
+                    this.sendOTP();
+                });
+                
+                // Start timer on step 5
+                document.getElementById('stepContent5').addEventListener('DOMNodeInserted', () => {
+                    this.startOTPTimer();
+                    this.sendOTP();
+                });
+            }
+
+            startOTPTimer() {
+                const timerElement = document.getElementById('timer');
+                const resendBtn = document.getElementById('resendCode');
+                
+                resendBtn.style.display = 'none';
+                this.otpCountdown = 60;
+                
+                if (this.otpTimer) {
+                    clearInterval(this.otpTimer);
+                }
+                
+                this.updateTimerDisplay(timerElement);
+                
+                this.otpTimer = setInterval(() => {
+                    this.otpCountdown--;
+                    this.updateTimerDisplay(timerElement);
+                    
+                    if (this.otpCountdown <= 0) {
+                        clearInterval(this.otpTimer);
+                        resendBtn.style.display = 'inline';
+                        timerElement.textContent = '';
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay(timerElement) {
+                timerElement.textContent = ` (${this.otpCountdown}s)`;
+            }
+
+            sendOTP() {
+                // In a real app, this would make an AJAX call to your backend
+                console.log('Sending OTP to email...');
+                
+                // For demo purposes, we'll simulate a 123456 code
+                setTimeout(() => {
+                    console.log('OTP sent: 123456');
+                }, 1500);
+            }
+
+            validateField(field) {
+                if (!field.checkValidity()) {
+                    field.classList.add('is-invalid');
+                    return false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                    return true;
+                }
+            }
+
+            clearFieldError(field) {
+                field.classList.remove('is-invalid');
+            }
+
+            validateStep(step) {
+                let isValid = true;
+                
+                switch (step) {
+                    case 1:
+                        const accountType = document.getElementById('accountType');
+                        if (!accountType.value) {
+                            accountType.nextElementSibling.style.display = 'block';
+                            isValid = false;
+                        } else {
+                            accountType.nextElementSibling.style.display = 'none';
+                        }
+                        break;
+                        
+                    case 2:
+                        const requiredFields = document.querySelectorAll('#stepContent2 input[required], #stepContent2 textarea[required]');
+                        requiredFields.forEach(field => {
+                            if (!this.validateField(field)) {
+                                isValid = false;
+                            }
+                        });
+                        
+                        // Validate password match
+                        const password = document.getElementById('password');
+                        const confirmPassword = document.getElementById('confirmPassword');
+                        
+                        if (password.value !== confirmPassword.value) {
+                            confirmPassword.classList.add('is-invalid');
+                            isValid = false;
+                        }
+                        break;
+                        
+                    case 3:
+                        const idType = document.getElementById('idType');
+                        const idFile = document.getElementById('idFile');
+                        
+                        if (!idType.value) {
+                            idType.classList.add('is-invalid');
+                            isValid = false;
+                        }
+                        
+                        if (!idFile.files.length) {
+                            idFile.nextElementSibling.style.display = 'block';
+                            isValid = false;
+                        }
+                        break;
+                        
+                    case 4:
+                        const faceData = document.getElementById('faceData');
+                        if (!faceData.value) {
+                            faceData.nextElementSibling.style.display = 'block';
+                            isValid = false;
+                        }
+                        break;
+                        
+                    case 5:
+                        const otpCode = document.getElementById('otpCode');
+                        if (otpCode.value.length !== 6) {
+                            otpCode.nextElementSibling.style.display = 'block';
+                            isValid = false;
+                        }
+                        break;
+                }
+                
+                return isValid;
+            }
+
+            nextStep() {
+                if (!this.validateStep(this.currentStep)) {
+                    return;
+                }
+                
+                this.currentStep++;
+                this.updateProgress();
+                this.updateUI();
+            }
+
+            prevStep() {
+                this.currentStep--;
+                this.updateProgress();
+                this.updateUI();
+            }
+
+            updateProgress() {
+                // Update progress line
+                const progressPercentage = ((this.currentStep - 1) / (this.totalSteps - 1)) * 100;
+                document.getElementById('progressLine').style.width = `${progressPercentage}%`;
+                
+                // Update step indicators
+                for (let i = 1; i <= this.totalSteps; i++) {
+                    const stepElement = document.getElementById(`step${i}`);
+                    
+                    if (i < this.currentStep) {
+                        stepElement.classList.add('completed');
+                        stepElement.classList.remove('active');
+                    } else if (i === this.currentStep) {
+                        stepElement.classList.add('active');
+                        stepElement.classList.remove('completed');
+                    } else {
+                        stepElement.classList.remove('active', 'completed');
+                    }
+                }
+            }
+
+            updateUI() {
+                // Hide all step contents
+                document.querySelectorAll('.step-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show current step content
+                document.getElementById(`stepContent${this.currentStep}`).classList.add('active');
+                
+                // Update navigation buttons
+                document.getElementById('prevBtn').style.display = this.currentStep === 1 ? 'none' : 'block';
+                document.getElementById('nextBtn').style.display = this.currentStep === this.totalSteps ? 'none' : 'block';
+                document.getElementById('submitBtn').style.display = this.currentStep === this.totalSteps ? 'block' : 'none';
+                
+                // Scroll to top of form
+                document.querySelector('.form-container').scrollTo(0, 0);
+            }
+
+            submitForm(e) {
+                e.preventDefault();
+                
+                if (!this.validateStep(this.currentStep)) {
+                    return;
+                }
+                
+                // Collect all form data
+                const form = document.getElementById('signupForm');
+                const formElements = form.elements;
+                
+                for (let i = 0; i < formElements.length; i++) {
+                    const element = formElements[i];
+                    
+                    if (element.name && element.type !== 'file') {
+                        this.formData.append(element.name, element.value);
+                    }
+                }
+                
+                // Show loading spinner
+                document.getElementById('loadingSpinner').style.display = 'block';
+                document.getElementById('submitBtn').disabled = true;
+                
+                // In a real app, you would send the formData to your backend
+                console.log('Form data to be submitted:', this.formData);
+                
+                // Simulate API call
+                setTimeout(() => {
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    
+                    // Show success message
+                    alert('Registration successful! You will be notified once your account is approved.');
+                    
+                    // Redirect to login page
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        }
+
+        // Initialize the signup wizard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new SignupWizard();
+        });
+    </script>
+</body>
+</html>

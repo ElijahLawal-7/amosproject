@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Profile - Greenland Bounty</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2d5a27;
+            --secondary-green: #4a7c59;
+            --accent-gold: #d4af37;
+            --light-bg: #f8f9fa;
+            --earth-brown: #8b4513;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            min-height: 100vh;
+            color: white;
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 4px 0;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
+            pointer-events: none;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-gold);
+            object-fit: cover;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 20px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            border: none;
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-green), var(--primary-green));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 90, 39, 0.3);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-green);
+            border-color: var(--primary-green);
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            transform: translateY(-2px);
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.2rem rgba(45, 90, 39, 0.25);
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-green);
+            background-color: rgba(45, 90, 39, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent-gold);
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+            }
+            
+            .profile-header {
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h4 class="text-center mb-4">
+                        <i class="fas fa-leaf me-2"></i>
+                        Greenland Bounty
+                    </h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-home me-2"></i> Dashboard
+                        </a>
+                        <a class="nav-link" href="products.html">
+                            <i class="fas fa-seedling me-2"></i> My Products
+                        </a>
+                        <a class="nav-link" href="orders.html">
+                            <i class="fas fa-shopping-cart me-2"></i> Orders
+                        </a>
+                        <a class="nav-link" href="loans.html">
+                            <i class="fas fa-money-bill-wave me-2"></i> Loan Applications
+                        </a>
+                        <a class="nav-link active" href="profile.html">
+                            <i class="fas fa-user me-2"></i> Profile
+                        </a>
+                        <hr class="my-3">
+                        <a class="nav-link" href="../auth/login.html">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center text-md-start">
+                            <img src="../assets/images/placeholders/farmer-avatar.jpg" alt="Profile Picture" class="profile-avatar" id="profileImage">
+                        </div>
+                        <div class="col-md-6">
+                            <h2 class="mb-2" id="farmerName">John Adebayo</h2>
+                            <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>Lagos State, Nigeria</p>
+                            <p class="mb-2"><i class="fas fa-calendar-alt me-2"></i>Member since: January 2024</p>
+                            <span class="status-badge status-active">
+                                <i class="fas fa-check-circle me-1"></i>Verified Account
+                            </span>
+                        </div>
+                        <div class="col-md-3 text-center text-md-end">
+                            <button class="btn btn-outline-light mb-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="fas fa-edit me-2"></i>Edit Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card stats-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-seedling fa-2x text-success mb-2"></i>
+                                <h4 class="mb-1">24</h4>
+                                <p class="text-muted mb-0">Products Listed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card stats-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-shopping-cart fa-2x text-primary mb-2"></i>
+                                <h4 class="mb-1">156</h4>
+                                <p class="text-muted mb-0">Orders Received</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card stats-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                                <h4 class="mb-1">4.8</h4>
+                                <p class="text-muted mb-0">Average Rating</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card stats-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-money-bill-wave fa-2x text-success mb-2"></i>
+                                <h4 class="mb-1">₦2.5M</h4>
+                                <p class="text-muted mb-0">Total Earnings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Information -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-user me-2"></i>Personal Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="profileForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="fullName" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="fullName" value="John Adebayo" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="email" class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="email" value="john.adebayo@email.com" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="phone" class="form-label">Phone Number</label>
+                                            <input type="tel" class="form-control" id="phone" value="+234 803 123 4567">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="location" class="form-label">Location</label>
+                                            <input type="text" class="form-control" id="location" value="Lagos State, Nigeria">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Full Address</label>
+                                        <textarea class="form-control" id="address" rows="3">123 Farm Road, Ikorodu, Lagos State, Nigeria</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="bio" class="form-label">Bio/Description</label>
+                                        <textarea class="form-control" id="bio" rows="4" placeholder="Tell customers about yourself and your farming experience...">Experienced farmer specializing in organic vegetables and sustainable farming practices. Been farming for over 15 years with focus on quality produce.</textarea>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-outline-primary me-2">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Account Status -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Account Status</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Account Verification</span>
+                                    <span class="status-badge status-active">Verified</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>ID Document</span>
+                                    <span class="status-badge status-active">Approved</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Face Photo</span>
+                                    <span class="status-badge status-active">Verified</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Account Status</span>
+                                    <span class="status-badge status-active">Active</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Change Password -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fas fa-lock me-2"></i>Security</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mb-3">Keep your account secure by updating your password regularly.</p>
+                                <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                    <i class="fas fa-key me-2"></i>Change Password
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="text-center mb-4">
+                            <img src="../assets/images/placeholders/farmer-avatar.jpg" alt="Profile Picture" class="profile-avatar mb-3" id="modalProfileImage">
+                            <div class="upload-area" id="imageUploadArea">
+                                <i class="fas fa-camera fa-2x text-muted mb-2"></i>
+                                <p class="mb-0">Click to upload new profile picture</p>
+                                <small class="text-muted">JPG, PNG up to 2MB</small>
+                                <input type="file" id="profileImageInput" class="d-none" accept="image/*">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="modalFullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="modalFullName" value="John Adebayo">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="modalPhone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="modalPhone" value="+234 803 123 4567">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="modalLocation" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="modalLocation" value="Lagos State, Nigeria">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="modalAddress" class="form-label">Full Address</label>
+                            <textarea class="form-control" id="modalAddress" rows="3">123 Farm Road, Ikorodu, Lagos State, Nigeria</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="modalBio" class="form-label">Bio/Description</label>
+                            <textarea class="form-control" id="modalBio" rows="4">Experienced farmer specializing in organic vegetables and sustainable farming practices. Been farming for over 15 years with focus on quality produce.</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm">
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" required>
+                            <div class="form-text">Password must be at least 8 characters long</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="changePassword()">Update Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Profile Image Upload Handler
+        document.getElementById('imageUploadArea').addEventListener('click', function() {
+            document.getElementById('profileImageInput').click();
+        });
+
+        document.getElementById('profileImageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('modalProfileImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Drag and Drop for image upload
+        const uploadArea = document.getElementById('imageUploadArea');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('modalProfileImage').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        // Save Profile Function
+        function saveProfile() {
+            const formData = {
+                fullName: document.getElementById('modalFullName').value,
+                phone: document.getElementById('modalPhone').value,
+                location: document.getElementById('modalLocation').value,
+                address: document.getElementById('modalAddress').value,
+                bio: document.getElementById('modalBio').value
+            };
+
+            // Here you would typically send the data to your backend
+            console.log('Saving profile:', formData);
+
+            // Update the main profile display
+            document.getElementById('fullName').value = formData.fullName;
+            document.getElementById('phone').value = formData.phone;
+            document.getElementById('location').value = formData.location;
+            document.getElementById('address').value = formData.address;
+            document.getElementById('bio').value = formData.bio;
+            document.getElementById('farmerName').textContent = formData.fullName;
+
+            // Update profile image if changed
+            const modalImg = document.getElementById('modalProfileImage').src;
+            document.getElementById('profileImage').src = modalImg;
+
+            // Close modal and show success message
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+            modal.hide();
+
+            // Show success toast
+            showToast('Profile updated successfully!', 'success');
+        }
+
+        // Change Password Function
+        function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showToast('New passwords do not match', 'error');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                showToast('Password must be at least 8 characters long', 'error');
+                return;
+            }
+
+            // Here you would typically send the data to your backend
+            console.log('Changing password...');
+
+            // Clear form
+            document.getElementById('changePasswordForm').reset();
+
+            // Close modal and show success message
+            const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+            modal.hide();
+
+            showToast('Password updated successfully!', 'success');
+        }
+
+        // Toast notification function
+        function showToast(message, type) {
+            // Create toast element
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+
+            // Add to toast container or create one
+            let toastContainer = document.querySelector('.toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+                document.body.appendChild(toastContainer);
+            }
+
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            
+            // Initialize and show toast
+            const toastElement = toastContainer.lastElementChild;
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+
+            // Remove toast element after it's hidden
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
+        }
+
+        // Form submit handler
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            // Here you would typically send the data to your backend
+            console.log('Saving profile from main form...');
+            
+            showToast('Profile updated successfully!', 'success');
+        });
+    </script>
+</body>
+</html>

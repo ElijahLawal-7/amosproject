@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Management - Greenland Bounty</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="fas fa-seedling me-2"></i>Greenland Bounty
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>John Investor
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="../../auth/login.html"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="sidebar bg-white shadow-sm vh-100">
+                    <div class="sidebar-header p-3 border-bottom">
+                        <h6 class="mb-0 text-success"><i class="fas fa-chart-line me-2"></i>Investor Panel</h6>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html">
+                                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="wallet.html">
+                                    <i class="fas fa-wallet me-2"></i>Wallet
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="savings.html">
+                                    <i class="fas fa-piggy-bank me-2"></i>Savings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="investments.html">
+                                    <i class="fas fa-chart-bar me-2"></i>Investments
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="transactions.html">
+                                    <i class="fas fa-history me-2"></i>Transactions
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10">
+                <div class="main-content p-4">
+                    <!-- Page Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="text-dark mb-0">Wallet Management</h2>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#fundWalletModal">
+                                <i class="fas fa-plus me-1"></i>Fund Wallet
+                            </button>
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#withdrawModal">
+                                <i class="fas fa-minus me-1"></i>Withdraw
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Wallet Balance Card -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm bg-gradient-success text-white">
+                                <div class="card-body p-4">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-8">
+                                            <h3 class="mb-1">Current Balance</h3>
+                                            <h1 class="display-4 fw-bold mb-0" id="currentBalance">₦25,000.00</h1>
+                                            <p class="mb-0 opacity-75">Available for investment and savings</p>
+                                        </div>
+                                        <div class="col-md-4 text-end">
+                                            <i class="fas fa-wallet fa-5x opacity-25"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <div class="text-primary mb-2">
+                                        <i class="fas fa-arrow-up fa-2x"></i>
+                                    </div>
+                                    <h5 class="card-title text-muted">Total Funded</h5>
+                                    <h4 class="text-primary mb-0" id="totalFunded">₦500,000.00</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <div class="text-warning mb-2">
+                                        <i class="fas fa-arrow-down fa-2x"></i>
+                                    </div>
+                                    <h5 class="card-title text-muted">Total Withdrawn</h5>
+                                    <h4 class="text-warning mb-0" id="totalWithdrawn">₦125,000.00</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <div class="text-info mb-2">
+                                        <i class="fas fa-chart-line fa-2x"></i>
+                                    </div>
+                                    <h5 class="card-title text-muted">Net Flow</h5>
+                                    <h4 class="text-info mb-0" id="netFlow">₦375,000.00</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Wallet Transactions</h5>
+                                    <div class="d-flex gap-2">
+                                        <select class="form-select form-select-sm" id="transactionFilter" onchange="filterTransactions()">
+                                            <option value="all">All Transactions</option>
+                                            <option value="funding">Funding Only</option>
+                                            <option value="withdrawal">Withdrawals Only</option>
+                                            <option value="investment">Investment Transfers</option>
+                                        </select>
+                                        <a href="transactions.html" class="btn btn-sm btn-outline-primary">View All</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Date & Time</th>
+                                                    <th>Type</th>
+                                                    <th>Description</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
+                                                    <th>Reference</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="transactionsTable">
+                                                <!-- Transactions will be loaded here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <!-- Pagination -->
+                                    <nav aria-label="Transaction pagination" class="mt-3">
+                                        <ul class="pagination pagination-sm justify-content-center">
+                                            <li class="page-item disabled">
+                                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                            </li>
+                                            <li class="page-item active">
+                                                <a class="page-link" href="#">1</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">2</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">3</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">Next</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fund Wallet Modal -->
+    <div class="modal fade" id="fundWalletModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-plus me-2"></i>Fund Your Wallet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="fundWalletForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="fundAmount" class="form-label">Amount to Fund *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₦</span>
+                                        <input type="number" class="form-control" id="fundAmount" required min="1000" step="100" placeholder="Enter amount">
+                                    </div>
+                                    <small class="form-text text-muted">Minimum: ₦1,000 | Maximum: ₦5,000,000</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="paymentMethod" class="form-label">Payment Method *</label>
+                                    <select class="form-select" id="paymentMethod" required onchange="updatePaymentDetails()">
+                                        <option value="">Select payment method</option>
+                                        <option value="card">Debit/Credit Card</option>
+                                        <option value="bank_transfer">Bank Transfer</option>
+                                        <option value="ussd">USSD Code</option>
+                                        <option value="bank_deposit">Direct Bank Deposit</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3" id="cardDetails" style="display: none;">
+                                    <label class="form-label">Card Information</label>
+                                    <div class="row">
+                                        <div class="col-12 mb-2">
+                                            <input type="text" class="form-control" placeholder="Card Number" maxlength="19">
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" placeholder="CVV" maxlength="4">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card bg-light h-100">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Transaction Summary</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Amount:</span>
+                                            <span id="summaryAmount">₦0.00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Processing Fee:</span>
+                                            <span id="summaryFee">₦0.00</span>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex justify-content-between fw-bold">
+                                            <span>Total:</span>
+                                            <span id="summaryTotal">₦0.00</span>
+                                        </div>
+                                        
+                                        <div class="mt-3" id="paymentInstructions">
+                                            <small class="text-muted">Select a payment method to see instructions</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" onclick="processFunding()" id="proceedBtn" disabled>
+                        <i class="fas fa-credit-card me-1"></i>Proceed to Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-minus me-2"></i>Withdraw Funds</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Note:</strong> Withdrawals are only available for matured investments and savings. Processing takes 1-3 business days.
+                    </div>
+                    
+                    <form id="withdrawForm">
+                        <div class="mb-3">
+                            <label for="withdrawAmount" class="form-label">Amount to Withdraw</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₦</span>
+                                <input type="number" class="form-control" id="withdrawAmount" required min="1000" step="100">
+                            </div>
+                            <small class="form-text text-muted">Available balance: <span class="fw-bold text-success">₦25,000.00</span></small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="withdrawReason" class="form-label">Reason for Withdrawal</label>
+                            <select class="form-select" id="withdrawReason" required>
+                                <option value="">Select reason</option>
+                                <option value="matured_investment">Matured Investment</option>
+                                <option value="matured_savings">Matured Savings</option>
+                                <option value="partial_withdrawal">Partial Withdrawal</option>
+                                <option value="emergency">Emergency</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="bankAccount" class="form-label">Bank Account</label>
+                            <select class="form-select" id="bankAccount" required>
+                                <option value="">Select bank account</option>
+                                <option value="1">GTBank - 0123456789</option>
+                                <option value="2">Access Bank - 9876543210</option>
+                                <option value="add">+ Add New Bank Account</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3" id="otherReason" style="display: none;">
+                            <label for="otherReasonText" class="form-label">Please specify</label>
+                            <textarea class="form-control" id="otherReasonText" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="processWithdrawal()">
+                        <i class="fas fa-paper-plane me-1"></i>Submit Request
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script>
+        // Sample transaction data
+        const sampleTransactions = [
+            {
+                id: 'TXN001',
+                date: '2025-06-29 10:30:00',
+                type: 'funding',
+                description: 'Wallet funding via Debit Card',
+                amount: 50000,
+                status: 'completed',
+                reference: 'PAY_12345'
+            },
+            {
+                id: 'TXN002',
+                date: '2025-06-28 15:45:00',
+                type: 'investment',
+                description: 'Investment in Agro Project A',
+                amount: -25000,
+                status: 'completed',
+                reference: 'INV_67890'
+            },
+            {
+                id: 'TXN003',
+                date: '2025-06-27 09:15:00',
+                type: 'funding',
+                description: 'Bank Transfer funding',
+                amount: 75000,
+                status: 'completed',
+                reference: 'TRF_54321'
+            },
+            {
+                id: 'TXN004',
+                date: '2025-06-26 14:20:00',
+                type: 'withdrawal',
+                description: 'Matured savings withdrawal',
+                amount: -15000,
+                status: 'processing',
+                reference: 'WTH_98765'
+            },
+            {
+                id: 'TXN005',
+                date: '2025-06-25 11:00:00',
+                type: 'investment',
+                description: 'Investment in Livestock Project',
+                amount: -100000,
+                status: 'completed',
+                reference: 'INV_11111'
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTransactions();
+            setupEventListeners();
+        });
+
+        function loadTransactions(filter = 'all') {
+            const tableBody = document.getElementById('transactionsTable');
+            let filteredTransactions = sampleTransactions;
+
+            if (filter !== 'all') {
+                filteredTransactions = sampleTransactions.filter(t => t.type === filter);
+            }
+
+            if (filteredTransactions.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            <i class="fas fa-info-circle me-2"></i>No transactions found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = filteredTransactions.map(transaction => {
+                const statusBadge = getStatusBadge(transaction.status);
+                const typeIcon = getTypeIcon(transaction.type);
+                const amountClass = transaction.amount > 0 ? 'text-success' : 'text-danger';
+                const amountSign = transaction.amount > 0 ? '+' : '';
+
+                return `
+                    <tr>
+                        <td>${formatDateTime(transaction.date)}</td>
+                        <td>
+                            <i class="${typeIcon} me-2"></i>
+                            ${capitalizeFirst(transaction.type)}
+                        </td>
+                        <td>${transaction.description}</td>
+                        <td class="${amountClass} fw-bold">
+                            ${amountSign}₦${Math.abs(transaction.amount).toLocaleString()}
+                        </td>
+                        <td>${statusBadge}</td>
+                        <td><small class="text-muted">${transaction.reference}</small></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterTransactions() {
+            const filter = document.getElementById('transactionFilter').value;
+            loadTransactions(filter);
+        }
+
+        function setupEventListeners() {
+            // Fund amount input listener
+            document.getElementById('fundAmount').addEventListener('input', updateSummary);
+            
+            // Withdraw reason change listener
+            document.getElementById('withdrawReason').addEventListener('change', function() {
+                const otherDiv = document.getElementById('otherReason');
+                otherDiv.style.display = this.value === 'other' ? 'block' : 'none';
+            });
+        }
+
+        function updatePaymentDetails() {
+            const method = document.getElementById('paymentMethod').value;
+            const cardDetails = document.getElementById('cardDetails');
+            const instructions = document.getElementById('paymentInstructions');
+            const proceedBtn = document.getElementById('proceedBtn');
+            
+            cardDetails.style.display = method === 'card' ? 'block' : 'none';
+            proceedBtn.disabled = !method;
+            
+            let instructionText = '';
+            switch(method) {
+                case 'card':
+                    instructionText = 'Enter your card details to proceed with payment via our secure payment gateway.';
+                    break;
+                case 'bank_transfer':
+                    instructionText = 'You will be provided with bank details for direct transfer after clicking proceed.';
+                    break;
+                case 'ussd':
+                    instructionText = 'USSD code will be generated for your bank after proceeding.';
+                    break;
+                case 'bank_deposit':
+                    instructionText = 'Bank deposit slip and account details will be provided after proceeding.';
+                    break;
+                default:
+                    instructionText = 'Select a payment method to see instructions';
+            }
+            
+            instructions.innerHTML = `<small class="text-muted">${instructionText}</small>`;
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const amount = parseFloat(document.getElementById('fundAmount').value) || 0;
+            const fee = Math.max(100, amount * 0.015); // 1.5% fee, minimum ₦100
+            const total = amount + fee;
+            
+            document.getElementById('summaryAmount').textContent = `₦${amount.toLocaleString()}`;
+            document.getElementById('summaryFee').textContent = `₦${fee.toLocaleString()}`;
+            document.getElementById('summaryTotal').textContent = `₦${total.toLocaleString()}`;
+        }
+
+        function processFunding() {
+            const amount = document.getElementById('fundAmount').value;
+            const method = document.getElementById('paymentMethod').value;
+            
+            if (!amount || !method) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (amount < 1000) {
+                alert('Minimum funding amount is ₦1,000');
+                return;
+            }
+
+            // Simulate payment processing
+            const modal = bootstrap.Modal.getInstance(document.getElementById('fundWalletModal'));
+            modal.hide();
+            
+            // Show loading state
+            showLoadingAlert('Processing payment...');
+            
+            // Simulate API call
+            setTimeout(() => {
+                hideLoadingAlert();
+                showSuccessAlert(`Payment of ₦${parseInt(amount).toLocaleString()} initiated successfully!`);
+                
+                // Refresh page data
+                location.reload();
+            }, 2000);
+        }
+
+        function processWithdrawal() {
+            const amount = document.getElementById('withdrawAmount').value;
+            const reason = document.getElementById('withdrawReason').value;
+            const bankAccount = document.getElementById('bankAccount').value;
+            
+            if (!amount || !reason || !bankAccount) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (amount < 1000) {
+                alert('Minimum withdrawal amount is ₦1,000');
+                return;
+            }
+
+            if (amount > 25000) {
+                alert('Insufficient balance for this withdrawal');
+                return;
+            }
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('withdrawModal'));
+            modal.hide();
+            
+            showSuccessAlert(`Withdrawal request for ₦${parseInt(amount).toLocaleString()} submitted successfully! Processing time: 1-3 business days.`);
+        }
+
+        // Helper functions
+        function getStatusBadge(status) {
+            const badges = {
+                'completed': '<span class="badge bg-success">Completed</span>',
+                'processing': '<span class="badge bg-warning">Processing</span>',
+                'failed': '<span class="badge bg-danger">Failed</span>',
+                'pending': '<span class="badge bg-secondary">Pending</span>'
+            };
+            return badges[status] || '<span class="badge bg-secondary">Unknown</span>';
+        }
+
+        function getTypeIcon(type) {
+            const icons = {
+                'funding': 'fas fa-arrow-up text-success',
+                'withdrawal': 'fas fa-arrow-down text-warning',
+                'investment': 'fas fa-chart-line text-primary',
+                'savings': 'fas fa-piggy-bank text-info'
+            };
+            return icons[type] || 'fas fa-circle';
+        }
+
+        function formatDateTime(dateStr) {
+            return new Date(dateStr).toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function showLoadingAlert(message) {
+            // Implementation for loading alert
+            console.log('Loading:', message);
+        }
+
+        function hideLoadingAlert() {
+            // Implementation to hide loading alert
+            console.log('Loading complete');
+        }
+
+        function showSuccessAlert(message) {
+            alert(message); // Simple implementation, can be enhanced with better UI
+        }
+    </script>
+</body>
+</html>

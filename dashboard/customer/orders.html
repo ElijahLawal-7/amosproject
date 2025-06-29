@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - Greenland Bounty Investment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="../../index.html">
+                <i class="fas fa-seedling me-2"></i>
+                Greenland Bounty
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            John Doe
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="index.html"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../auth/login.html"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-5 pt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="products.html">
+                                <i class="fas fa-shopping-bag me-2"></i>
+                                Browse Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="cart.html">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                Shopping Cart
+                                <span class="badge bg-success ms-2">3</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="orders.html">
+                                <i class="fas fa-box me-2"></i>
+                                Order History
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="events.html">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Events & Programs
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-box me-2"></i>Order History</h1>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-filter me-2"></i>Filter Orders
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" data-filter="all">All Orders</a></li>
+                            <li><a class="dropdown-item" href="#" data-filter="pending">Pending</a></li>
+                            <li><a class="dropdown-item" href="#" data-filter="processing">Processing</a></li>
+                            <li><a class="dropdown-item" href="#" data-filter="shipped">Shipped</a></li>
+                            <li><a class="dropdown-item" href="#" data-filter="delivered">Delivered</a></li>
+                            <li><a class="dropdown-item" href="#" data-filter="cancelled">Cancelled</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Order Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="mb-0">12</h4>
+                                        <small>Total Orders</small>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-shopping-bag fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="mb-0">3</h4>
+                                        <small>Pending Orders</small>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-clock fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="mb-0">8</h4>
+                                        <small>Delivered</small>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-check-circle fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="mb-0">₦285,400</h4>
+                                        <small>Total Spent</small>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-money-bill fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders List -->
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Recent Orders</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="ordersList">
+                            <!-- Order 1 -->
+                            <div class="order-item border-bottom p-4" data-status="delivered">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <h6 class="mb-1">Order #GB001234</h6>
+                                                <small class="text-muted">Placed on December 15, 2024</small>
+                                            </div>
+                                            <span class="badge bg-success">Delivered</span>
+                                        </div>
+                                        <div class="order-items">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="../../assets/images/placeholders/tomatoes.jpg" alt="Tomatoes" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-bold">Fresh Organic Tomatoes (2kg)</div>
+                                                    <small class="text-muted">by Green Valley Farm</small>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="../../assets/images/placeholders/peppers.jpg" alt="Peppers" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-bold">Fresh Bell Peppers (1kg)</div>
+                                                    <small class="text-muted">by Rainbow Gardens</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                Delivered to: 123 Main Street, Victoria Island, Lagos
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-md-end">
+                                        <div class="h5 text-success mb-2">₦6,800</div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-outline-success btn-sm me-2" onclick="viewOrderDetails('GB001234')">
+                                                <i class="fas fa-eye me-1"></i>View Details
+                                            </button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="reorderItems('GB001234')">
+                                                <i class="fas fa-redo me-1"></i>Reorder
+                                            </button>
+                                        </div>
+                                        <div class="text-muted small">
+                                            <i class="fas fa-truck me-1"></i>
+                                            Delivered on Dec 17, 2024
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order 2 -->
+                            <div class="order-item border-bottom p-4" data-status="shipped">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <h6 class="mb-1">Order #GB001235</h6>
+                                                <small class="text-muted">Placed on December 20, 2024</small>
+                                            </div>
+                                            <span class="badge bg-info">Shipped</span>
+                                        </div>
+                                        <div class="order-items">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="../../assets/images/placeholders/rice.jpg" alt="Rice" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-bold">Premium Local Rice (50kg)</div>
+                                                    <small class="text-muted">by Sunrise Farms</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                Shipping to: 123 Main Street, Victoria Island, Lagos
+                                            </small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <div class="progress" style="height: 8px;">
+                                                <div class="progress-bar bg-info" role="progressbar" style="width: 75%"></div>
+                                            </div>
+                                            <small class="text-muted">Tracking: GB-SHIP-789456</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-md-end">
+                                        <div class="h5 text-success mb-2">₦17,500</div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-outline-success btn-sm me-2" onclick="viewOrderDetails('GB001235')">
+                                                <i class="fas fa-eye me-1"></i>View Details
+                                            </button>
+                                            <button class="btn btn-outline-info btn-sm" onclick="trackOrder('GB001235')">
+                                                <i class="fas fa-truck me-1"></i>Track Order
+                                            </button>
+                                        </div>
+                                        <div class="text-muted small">
+                                            <i class="fas fa-clock me-1"></i>
+                                            Est. delivery: Dec 23, 2024
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order 3 -->
+                            <div class="order-item border-bottom p-4" data-status="processing">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <h6 class="mb-1">Order #GB001236</h6>
+                                                <small class="text-muted">Placed on December 22, 2024</small>
+                                            </div>
+                                            <span class="badge bg-warning">Processing</span>
+                                        </div>
+                                        <div class="order-items">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="../../assets/images/placeholders/onions.jpg" alt="Onions" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-bold">Fresh Red Onions (3kg)</div>
+                                                    <small class="text-muted">by Valley Produce</small>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="../../assets/images/placeholders/carrots.jpg" alt="Carrots" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-bold">Fresh Carrots (2kg)</div>
+                                                    <small class="text-muted">by Garden Fresh Co.</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                Delivery to: 123 Main Street, Victoria Island, Lagos
+                                            </small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <div class="progress" style="height: 8px;">
+                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 25%"></div>
+                                            </div>
+                                            <small class="text-muted">Being prepared by farmers</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-md-end">
+                                        <div class="h5 text-success mb-2">₦4,200</div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-outline-success btn-sm me-2" onclick="viewOrderDetails('GB001236')">
+                                                <i class="fas fa-eye me-1"></i>View Details
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm" onclick="cancelOrder('GB001236')">
+                                                <i class="fas fa-times me-1"></i>Cancel
+                                            </button>
+                                        </div>
+                                        <div class="text-muted small">
+                                            <i class="fas fa-clock me-1"></i>
+                                            Est. delivery: Dec 25, 2024
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order 4 -->
+                            <div class="order-item p-4" data-status="pending">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <h6 class="mb-1">Order #GB001237</h6>
+                                                <small class="text-muted">Placed on December 23, 2024</small>
+                                            </div>
+                                            <span class="badge bg-secondary">Pending</span>
+                                        </div>
+                                        <div class="order-items">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="../../assets/images/placeholders/yam.jpg" alt="Yam" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-bold">Fresh Yam Tubers (5kg)</div>
+                                                    <small class="text-muted">by Highland Farms</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                Delivery to: 123 Main Street, Victoria Island, Lagos
+                                            </small>
+                                        </div>
+                                        <div class="mt-2">
+                                            <div class="alert alert-info py-2">
+                                                <small><i class="fas fa-info-circle me-1"></i>Waiting for farmer confirmation</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-md-end">
+                                        <div class="h5 text-success mb-2">₦8,500</div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-outline-success btn-sm me-2" onclick="viewOrderDetails('GB001237')">
+                                                <i class="fas fa-eye me-1"></i>View Details
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm" onclick="cancelOrder('GB001237')">
+                                                <i class="fas fa-times me-1"></i>Cancel
+                                            </button>
+                                        </div>
+                                        <div class="text-muted small">
+                                            <i class="fas fa-hourglass-half me-1"></i>
+                                            Awaiting confirmation
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="p-3 border-top">
+                            <nav>
+                                <ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="orderDetailsContent">
+                    <!-- Order details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="downloadInvoice()">
+                        <i class="fas fa-download me-2"></i>Download Invoice
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel Order Modal -->
+    <div class="modal fade" id="cancelOrderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cancel Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this order?</p>
+                    <div class="form-group">
+                        <label for="cancelReason" class="form-label">Reason for cancellation (Optional)</label>
+                        <textarea class="form-control" id="cancelReason" rows="3" placeholder="Tell us why you're cancelling this order"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Order</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancel">Cancel Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Tracking Modal -->
+    <div class="modal fade" id="trackingModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Tracking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="trackingContent">
+                    <!-- Tracking information will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+    <script>
+        // Order management functionality
+        class OrderManager {
+            constructor() {
+                this.orders = [
+                    {
+                        id: 'GB001234',
+                        status: 'delivered',
+                        date: '2024-12-15',
+                        total: 6800,
+                        items: [
+                            { name: 'Fresh Organic Tomatoes', quantity: 2, unit: 'kg', price: 2500 },
+                            { name: 'Fresh Bell Peppers', quantity: 1, unit: 'kg', price: 1800 }
+                        ]
+                    },
+                    {
+                        id: 'GB001235',
+                        status: 'shipped',
+                        date: '2024-12-20',
+                        total: 17500,
+                        tracking: 'GB-SHIP-789456',
+                        items: [
+                            { name: 'Premium Local Rice', quantity: 1, unit: '50kg bag', price: 15000 }
+                        ]
+                    }
+                ];
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                // Filter events
+                document.querySelectorAll('[data-filter]').forEach(filter => {
+                    filter.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const filterValue = e.target.dataset.filter;
+                        this.filterOrders(filterValue);
+                    });
+                });
+            }
+
+            filterOrders(status) {
+                const orders = document.querySelectorAll('.order-item');
+                orders.forEach(order => {
+                    if (status === 'all' || order.dataset.status === status) {
+                        order.style.display = 'block';
+                    } else {
+                        order.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // Order action functions
+        function viewOrderDetails(orderId) {
+            const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+            const content = document.getElementById('orderDetailsContent');
+            
+            // Simulate loading order details
+            content.innerHTML = `
+                <div class="order-summary">
+                    <h6>Order #${orderId}</h6>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Order Date:</strong></div>
+                        <div class="col-sm-8">December 15, 2024</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Status:</strong></div>
+                        <div class="col-sm-8"><span class="badge bg-success">Delivered</span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Total:</strong></div>
+                        <div class="col-sm-8"><strong>₦6,800</strong></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Delivery Address:</strong></div>
+                        <div class="col-sm-8">123 Main Street, Victoria Island, Lagos</div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>Order Items</h6>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Fresh Organic Tomatoes</td>
+                                <td>2 kg</td>
+                                <td>₦2,500</td>
+                                <td>₦5,000</td>
+                            </tr>
+                            <tr>
+                                <td>Fresh Bell Peppers</td>
+                                <td>1 kg</td>
+                                <td>₦1,800</td>
+                                <td>₦1,800</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Total</th>
+                                <th>₦6,800</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+            
+            modal.show();
+        }
+
+        function trackOrder(orderId) {
+            const modal = new bootstrap.Modal(document.getElementById('trackingModal'));
+            const content = document.getElementById('trackingContent');
+            
+            content.innerHTML = `
+                <div class="tracking-info">
+                    <h6>Order #${orderId} - Tracking: GB-SHIP-789456</h6>
+                    
+                    <div class="timeline mt-4">
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6>Order Confirmed</h6>
+                                <small class="text-muted">Dec 20, 2024 - 10:30 AM</small>
+                                <p>Your order has been confirmed and is being prepared.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6>Package Prepared</h6>
+                                <small class="text-muted">Dec 21, 2024 - 2:15 PM</small>
+                                <p>Your package has been prepared and is ready for pickup.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item active">
+                            <div class="timeline-marker bg-info"></div>
+                            <div class="timeline-content">
+                                <h6>In Transit</h6>
+                                <small class="text-muted">Dec 22, 2024 - 8:00 AM</small>
+                                <p>Your package is on its way to the delivery location.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-light"></div>
+                            <div class="timeline-content">
+                                <h6>Out for Delivery</h6>
+                                <small class="text-muted">Expected: Dec 23, 2024</small>
+                                <p>Package will be out for delivery.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-light"></div>
+                            <div class="timeline-content">
+                                <h6>Delivered</h6>
+                                <small class="text-muted">Expected: Dec 23, 2024</small>
+                                <p>Package will be delivered to your address.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <style>
+                    .timeline {
+                        position: relative;
+                        padding-left: 30px;
+                    }
+                    
+                    .timeline-item {
+                        position: relative;
+                        margin-bottom: 30px;
+                    }
+                    
+                    .timeline-item:before {
+                        content: '';
+                        position: absolute;
+                        left: -23px;
+                        top: 20px;
+                        height: calc(100% + 10px);
+                        width: 2px;
+                        background: #dee2e6;
+                    }
+                    
+                    .timeline-item:last-child:before {
+                        display: none;
+                    }
+                    
+                    .timeline-marker {
+                        position: absolute;
+                        left: -30px;
+                        top: 0;
+                        width: 14px;
+                        height: 14px;
+                        border-radius: 50%;
+                        border: 3px solid white;
+                        box-shadow: 0 0 0 2px #dee2e6;
+                    }
+                    
+                    .timeline-item.completed .timeline-marker {
+                        background: #28a745;
+                        box-shadow: 0 0 0 2px #28a745;
+                    }
+                    
+                    .timeline-item.active .timeline-marker {
+                        background: #17a2b8;
+                        box-shadow: 0 0 0 2px #17a2b8;
+                    }
+                </style>
+            `;
+            
+            modal.show();
+        }
+
+        function cancelOrder(orderId) {
+            const modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+            modal.show();
+            
+            document.getElementById('confirmCancel').onclick = () => {
+                // Simulate order cancellation
+                alert('Order cancelled successfully. Refund will be processed within 3-5 business days.');
+                modal.hide();
+                
+                // Update order status in UI
+                const orderElement = document.querySelector(`[data-order-id="${orderId}"]`);
+                if (orderElement) {
+                    const statusBadge = orderElement.querySelector('.badge');
+                    statusBadge.className = 'badge bg-danger';
+                    statusBadge.textContent = 'Cancelled';
+                }
+            };
+        }
+
+        function reorderItems(orderId) {
+            // Simulate adding items to cart
+            alert('Items have been added to your cart!');
+            window.location.href = 'cart.html';
+        }
+
+        function downloadInvoice() {
+            // Simulate invoice download
+            alert('Invoice download started...');
+        }
+
+        // Initialize order manager when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new OrderManager();
+        });
+    </script>
+</body>
+</html>

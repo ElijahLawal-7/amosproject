@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Applications - Greenland Bounty</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../../assets/css/dashboard.css" rel="stylesheet">
+    <style>
+        .loan-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-left: 4px solid #ffc107;
+        }
+        .loan-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .status-pending { background-color: #ffc107; }
+        .status-approved { background-color: #28a745; }
+        .status-rejected { background-color: #dc3545; }
+        .status-disbursed { background-color: #17a2b8; }
+        .status-repaid { background-color: #6c757d; }
+        .loan-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .progress-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .form-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .document-upload {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .document-upload:hover {
+            border-color: #28a745;
+            background-color: #f8f9fa;
+        }
+        .document-upload.dragover {
+            border-color: #28a745;
+            background-color: #e8f5e8;
+        }
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        .eligibility-criteria {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .loan-calculator {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">
+                <i class="fas fa-seedling me-2"></i>Greenland Bounty
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">
+                            <i class="fas fa-box me-1"></i>Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="orders.html">
+                            <i class="fas fa-shopping-cart me-1"></i>Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="loans.html">
+                            <i class="fas fa-money-bill-wave me-1"></i>Loans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">
+                            <i class="fas fa-user me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>John Farmer
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../../auth/login.html"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="mb-1"><i class="fas fa-money-bill-wave text-success me-2"></i>Loan Management</h2>
+                        <p class="text-muted mb-0">Apply for agricultural loans and track your applications</p>
+                    </div>
+                    <button class="btn btn-success" onclick="showNewLoanForm()">
+                        <i class="fas fa-plus me-1"></i>New Loan Application
+                    </button>
+                </div>
+
+                <!-- Loan Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card border-0 bg-primary text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-file-alt fa-2x mb-2"></i>
+                                <h4 class="mb-1">3</h4>
+                                <small>Total Applications</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card border-0 bg-warning text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clock fa-2x mb-2"></i>
+                                <h4 class="mb-1">1</h4>
+                                <small>Pending Review</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card border-0 bg-success text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                <h4 class="mb-1">1</h4>
+                                <small>Approved</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card border-0 bg-info text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-hand-holding-usd fa-2x mb-2"></i>
+                                <h4 class="mb-1">₦500K</h4>
+                                <small>Total Disbursed</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loan Applications -->
+                <div class="form-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4><i class="fas fa-list me-2"></i>My Loan Applications</h4>
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="loanFilter" id="allLoans" checked>
+                            <label class="btn btn-outline-primary" for="allLoans">All</label>
+                            <input type="radio" class="btn-check" name="loanFilter" id="pendingLoans">
+                            <label class="btn btn-outline-warning" for="pendingLoans">Pending</label>
+                            <input type="radio" class="btn-check" name="loanFilter" id="approvedLoans">
+                            <label class="btn btn-outline-success" for="approvedLoans">Approved</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Loan Application 1 -->
+                        <div class="col-lg-6 col-xl-4 mb-4">
+                            <div class="card loan-card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Loan #LA-2024-001</strong>
+                                        <small class="text-muted d-block">Applied: June 20, 2024</small>
+                                    </div>
+                                    <span class="badge status-pending">Pending</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="loan-amount text-center mb-3">₦300,000</div>
+                                    <div class="mb-3">
+                                        <small class="text-muted">Purpose:</small>
+                                        <p class="mb-1">Equipment Purchase - Irrigation System</p>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <small class="text-muted">Duration:</small>
+                                            <p class="mb-0">12 months</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">Interest Rate:</small>
+                                            <p class="mb-0">8% p.a.</p>
+                                        </div>
+                                    </div>
+                                    <div class="progress-container">
+                                        <small class="text-muted">Application Progress</small>
+                                        <div class="progress mt-1">
+                                            <div class="progress-bar bg-warning" style="width: 25%"></div>
+                                        </div>
+                                        <small class="text-muted">Under Review</small>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary btn-sm" onclick="viewLoanDetails('LA-2024-001')">
+                                            <i class="fas fa-eye me-1"></i>View Details
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loan Application 2 -->
+                        <div class="col-lg-6 col-xl-4 mb-4">
+                            <div class="card loan-card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Loan #LA-2024-002</strong>
+                                        <small class="text-muted d-block">Applied: June 15, 2024</small>
+                                    </div>
+                                    <span class="badge status-approved">Approved</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="loan-amount text-center mb-3">₦200,000</div>
+                                    <div class="mb-3">
+                                        <small class="text-muted">Purpose:</small>
+                                        <p class="mb-1">Seeds and Fertilizer Purchase</p>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <small class="text-muted">Duration:</small>
+                                            <p class="mb-0">6 months</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">Interest Rate:</small>
+                                            <p class="mb-0">6% p.a.</p>
+                                        </div>
+                                    </div>
+                                    <div class="progress-container">
+                                        <small class="text-muted">Disbursement Progress</small>
+                                        <div class="progress mt-1">
+                                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                                        </div>
+                                        <small class="text-success">Disbursed - June 18, 2024</small>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary btn-sm" onclick="viewLoanDetails('LA-2024-002')">
+                                            <i class="fas fa-eye me-1"></i>View Details
+                                        </button>
+                                        <button class="btn btn-success btn-sm" onclick="viewRepaymentSchedule('LA-2024-002')">
+                                            <i class="fas fa-calendar me-1"></i>Repayment Schedule
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loan Application 3 -->
+                        <div class="col-lg-6 col-xl-4 mb-4">
+                            <div class="card loan-card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Loan #LA-2024-003</strong>
+                                        <small class="text-muted d-block">Applied: June 10, 2024</small>
+                                    </div>
+                                    <span class="badge status-rejected">Rejected</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="loan-amount text-center mb-3">₦500,000</div>
+                                    <div class="mb-3">
+                                        <small class="text-muted">Purpose:</small>
+                                        <p class="mb-1">Land Expansion</p>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <small class="text-muted">Duration:</small>
+                                            <p class="mb-0">24 months</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">Interest Rate:</small>
+                                            <p class="mb-0">10% p.a.</p>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-danger py-2">
+                                        <small><i class="fas fa-exclamation-triangle me-1"></i>
+                                        Insufficient collateral documentation</small>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary btn-sm" onclick="viewLoanDetails('LA-2024-003')">
+                                            <i class="fas fa-eye me-1"></i>View Details
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="reapplyLoan('LA-2024-003')">
+                                            <i class="fas fa-redo me-1"></i>Reapply
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loan Calculator -->
+                <div class="form-section">
+                    <h4 class="mb-3"><i class="fas fa-calculator me-2"></i>Loan Calculator</h4>
+                    <div class="loan-calculator">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Loan Amount (₦)</label>
+                                <input type="number" class="form-control" id="loanAmount" value="100000" oninput="calculateLoan()">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Duration (months)</label>
+                                <select class="form-select" id="loanDuration" onchange="calculateLoan()">
+                                    <option value="6">6 months</option>
+                                    <option value="12" selected>12 months</option>
+                                    <option value="18">18 months</option>
+                                    <option value="24">24 months</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Interest Rate (%)</label>
+                                <input type="number" class="form-control" id="interestRate" value="8" step="0.1" oninput="calculateLoan()">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <small class="text-muted">Monthly Payment</small>
+                                    <h5 class="text-success" id="monthlyPayment">₦9,201</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <small class="text-muted">Total Interest</small>
+                                    <h5 class="text-warning" id="totalInterest">₦10,409</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <small class="text-muted">Total Repayment</small>
+                                    <h5 class="text-primary" id="totalRepayment">₦110,409</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <button class="btn btn-success" onclick="showNewLoanForm()">
+                                        Apply for This Loan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Loan Application Modal -->
+    <div class="modal fade" id="newLoanModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Loan Application</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loanApplicationForm">
+                        <!-- Step 1: Basic Information -->
+                        <div class="loan-step" id="step1">
+                            <h6 class="border-bottom pb-2 mb-3">Step 1: Basic Information</h6>
+                            
+                            <div class="eligibility-criteria mb-4">
+                                <h6><i class="fas fa-check-circle me-2"></i>Eligibility Criteria</h6>
+                                <ul class="mb-0">
+                                    <li>Verified farmer account with at least 3 months history</li>
+                                    <li>Minimum age of 18 years</li>
+                                    <li>Valid government-issued ID</li>
+                                    <li>Proof of agricultural activity</li>
+                                    <li>Collateral documentation (for loans above ₦200,000)</li>
+                                </ul>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Loan Amount (₦) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="amount" min="10000" max="2000000" required>
+                                    <div class="form-text">Minimum: ₦10,000 | Maximum: ₦2,000,000</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Loan Duration <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="duration" required>
+                                        <option value="">Select duration</option>
+                                        <option value="6">6 months</option>
+                                        <option value="12">12 months</option>
+                                        <option value="18">18 months</option>
+                                        <option value="24">24 months</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Loan Purpose <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="purpose" required>
+                                        <option value="">Select purpose</option>
+                                        <option value="seeds">Seeds and Planting Materials</option>
+                                        <option value="fertilizer">Fertilizer and Chemicals</option>
+                                        <option value="equipment">Farm Equipment Purchase</option>
+                                        <option value="irrigation">Irrigation System</option>
+                                        <option value="livestock">Livestock Purchase</option>
+                                        <option value="land">Land Preparation/Expansion</option>
+                                        <option value="processing">Processing Equipment</option>
+                                        <option value="storage">Storage Facilities</option>
+                                        <option value="other">Other (specify)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Detailed Description <span class="text-danger">*</span></label>
+                                <textarea class="form-control" name="description" rows="4" placeholder="Provide a detailed description of how you plan to use the loan..." required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Financial Information -->
+                        <div class="loan-step" id="step2" style="display: none;">
+                            <h6 class="border-bottom pb-2 mb-3">Step 2: Financial Information</h6>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Annual Income (₦) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="annual_income" required>
+                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Existing Debts (₦)</label>
+                                    <input type="number" class="form-control" name="existing_debts" value="0">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Collateral Type</label>
+                                    <select class="form-select" name="collateral_type">
+                                        <option value="">None</option>
+                                        <option value="land">Land/Property</option>
+                                        <option value="equipment">Farm Equipment</option>
+                                        <option value="livestock">Livestock</option>
+                                        <option value="crops">Future Crops</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Collateral Value (₦)</label>
+                                    <input type="number" class="form-control" name="collateral_value" value="0">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Repayment Plan <span class="text-danger">*</span></label>
+                                <select class="form-select" name="repayment_plan" required>
+                                    <option value="">Select repayment plan</option>
+                                    <option value="monthly">Monthly Installments</option>
+                                    <option value="quarterly">Quarterly Installments</option>
+                                    <option value="seasonal">Seasonal (After Harvest)</option>
+                                    <option value="bullet">Bullet Payment (End of Term)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Document Upload -->
+                        <div class="loan-step" id="step3" style="display: none;">
+                            <h6 class="border-bottom pb-2 mb-3">Step 3: Document Upload</h6>
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>Upload clear copies of required documents. Maximum file size: 5MB per file.
+                            </div>
+
+                            <div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="document-upload" id="idUpload">
+            <i class="fas fa-id-card fa-3x mb-3 text-muted"></i>
+            <p class="mb-2">Government Issued ID</p>
+            <small class="text-muted d-block mb-2">(National ID, Driver's License, Voter's Card, or International Passport)</small>
+            <input type="file" class="d-none" name="id_document" accept=".pdf,.jpg,.jpeg,.png">
+            <button type="button" class="btn btn-sm btn-outline-primary upload-btn" data-target="id_document">
+                <i class="fas fa-upload me-1"></i>Upload File
+            </button>
+            <div id="idPreview" class="mt-2"></div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="document-upload" id="proofUpload">
+            <i class="fas fa-file-alt fa-3x mb-3 text-muted"></i>
+            <p class="mb-2">Proof of Agricultural Activity</p>
+            <small class="text-muted d-block mb-2">(Farm registration, land ownership, or recent farming receipts)</small>
+            <input type="file" class="d-none" name="proof_document" accept=".pdf,.jpg,.jpeg,.png">
+            <button type="button" class="btn btn-sm btn-outline-primary upload-btn" data-target="proof_document">
+                <i class="fas fa-upload me-1"></i>Upload File
+            </button>
+            <div id="proofPreview" class="mt-2"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="document-upload" id="collateralUpload">
+            <i class="fas fa-file-contract fa-3x mb-3 text-muted"></i>
+            <p class="mb-2">Collateral Documentation</p>
+            <small class="text-muted d-block mb-2">(Required for loans above ₦200,000)</small>
+            <input type="file" class="d-none" name="collateral_document" accept=".pdf,.jpg,.jpeg,.png">
+            <button type="button" class="btn btn-sm btn-outline-primary upload-btn" data-target="collateral_document">
+                <i class="fas fa-upload me-1"></i>Upload File
+            </button>
+            <div id="collateralPreview" class="mt-2"></div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="document-upload" id="otherUpload">
+            <i class="fas fa-file-upload fa-3x mb-3 text-muted"></i>
+            <p class="mb-2">Other Supporting Documents</p>
+            <small class="text-muted d-block mb-2">(Optional additional documents)</small>
+            <input type="file" class="d-none" name="other_document" accept=".pdf,.jpg,.jpeg,.png">
+            <button type="button" class="btn btn-sm btn-outline-primary upload-btn" data-target="other_document">
+                <i class="fas fa-upload me-1"></i>Upload File
+            </button>
+            <div id="otherPreview" class="mt-2"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Step 4: Review and Submit -->
+<div class="loan-step" id="step4" style="display: none;">
+    <h6 class="border-bottom pb-2 mb-3">Step 4: Review and Submit</h6>
+    
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle me-2"></i>Please review all information carefully before submitting. You won't be able to edit after submission.
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h6 class="mb-0">Loan Application Summary</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Loan Amount:</dt>
+                        <dd class="col-sm-7" id="reviewAmount">₦0</dd>
+                        
+                        <dt class="col-sm-5">Loan Duration:</dt>
+                        <dd class="col-sm-7" id="reviewDuration">0 months</dd>
+                        
+                        <dt class="col-sm-5">Purpose:</dt>
+                        <dd class="col-sm-7" id="reviewPurpose"></dd>
+                        
+                        <dt class="col-sm-5">Description:</dt>
+                        <dd class="col-sm-7" id="reviewDescription"></dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Annual Income:</dt>
+                        <dd class="col-sm-7" id="reviewIncome">₦0</dd>
+                        
+                        <dt class="col-sm-5">Existing Debts:</dt>
+                        <dd class="col-sm-7" id="reviewDebts">₦0</dd>
+                        
+                        <dt class="col-sm-5">Collateral:</dt>
+                        <dd class="col-sm-7" id="reviewCollateral">None</dd>
+                        
+                        <dt class="col-sm-5">Repayment Plan:</dt>
+                        <dd class="col-sm-7" id="reviewRepayment"></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-check mb-4">
+        <input class="form-check-input" type="checkbox" id="termsAgreement" required>
+        <label class="form-check-label" for="termsAgreement">
+            I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a> of Greenland Bounty's loan program
+        </label>
+    </div>
+</div>
+
+<!-- Modal Footer -->
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;" onclick="prevStep()">
+        <i class="fas fa-arrow-left me-1"></i>Previous
+    </button>
+    <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+        Next <i class="fas fa-arrow-right ms-1"></i>
+    </button>
+    <button type="button" class="btn btn-success" id="submitBtn" style="display: none;" onclick="submitLoanApplication()">
+        <i class="fas fa-paper-plane me-1"></i>Submit Application
+    </button>
+</div>
+
+<script>
+// Add this to your existing JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle upload buttons
+    document.querySelectorAll('.upload-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetName = this.getAttribute('data-target');
+            document.querySelector(`input[name="${targetName}"]`).click();
+        });
+    });
+
+    // File input change handlers
+    ['id_document', 'proof_document', 'collateral_document', 'other_document'].forEach(name => {
+        const input = document.querySelector(`input[name="${name}"]`);
+        input.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const previewDiv = document.getElementById(`${name.split('_')[0]}Preview`);
+                const file = this.files[0];
+                
+                previewDiv.innerHTML = `
+                    <div class="uploaded-file">
+                        <i class="fas fa-file-pdf text-danger me-2"></i>
+                        <div class="flex-grow-1">
+                            <small class="d-block">${file.name}</small>
+                            <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentElement.remove(); document.querySelector('input[name=\\'${name}\\']').value = '';">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            }
+        });
+    });
+});
+</script>
+
+    <!-- Terms and Conditions Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Loan Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="max-height: 60vh; overflow-y: auto;">
+                        <h6>1. Loan Agreement</h6>
+                        <p>By applying for this loan, you agree to the following terms and conditions...</p>
+                        
+                        <h6>2. Interest Rates</h6>
+                        <p>Interest rates are fixed for the duration of the loan term...</p>
+                        
+                        <h6>3. Repayment</h6>
+                        <p>Repayment begins one month after loan disbursement...</p>
+                        
+                        <h6>4. Late Payments</h6>
+                        <p>Late payments will incur a penalty of 2% per month on the overdue amount...</p>
+                        
+                        <h6>5. Default</h6>
+                        <p>Failure to repay the loan within 90 days of the due date will be considered a default...</p>
+                        
+                        <h6>6. Collateral</h6>
+                        <p>For loans above ₦200,000, collateral may be required...</p>
+                        
+                        <h6>7. Early Repayment</h6>
+                        <p>Early repayment is allowed without penalty...</p>
+                        
+                        <h6>8. Loan Use</h6>
+                        <p>The loan must be used for the stated agricultural purpose...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loan Details Modal -->
+    <div class="modal fade" id="loanDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Loan Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="loanDetailsContent">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repayment Schedule Modal -->
+    <div class="modal fade" id="repaymentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Repayment Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Due Date</th>
+                                    <th>Amount</th>
+                                    <th>Principal</th>
+                                    <th>Interest</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="repaymentScheduleBody">
+                                <!-- Will be populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="printRepaymentSchedule()">
+                        <i class="fas fa-print me-1"></i>Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Current step in the loan application process
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // Show the new loan application form
+        function showNewLoanForm() {
+            currentStep = 1;
+            resetLoanForm();
+            document.getElementById('prevBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            document.getElementById('submitBtn').style.display = 'none';
+            
+            const modal = new bootstrap.Modal(document.getElementById('newLoanModal'));
+            modal.show();
+        }
+
+        // Reset the loan application form
+        function resetLoanForm() {
+            document.getElementById('loanApplicationForm').reset();
+            document.querySelectorAll('.loan-step').forEach(step => {
+                step.style.display = 'none';
+            });
+            document.getElementById('step1').style.display = 'block';
+            
+            // Clear file previews
+            ['idPreview', 'proofPreview', 'collateralPreview', 'otherPreview'].forEach(id => {
+                document.getElementById(id).innerHTML = '';
+            });
+        }
+
+        // Navigate to the next step in the loan application
+        function nextStep() {
+            // Validate current step before proceeding
+            if (!validateStep(currentStep)) {
+                return;
+            }
+
+            document.getElementById(`step${currentStep}`).style.display = 'none';
+            currentStep++;
+            document.getElementById(`step${currentStep}`).style.display = 'block';
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').style.display = 'inline-block';
+            
+            if (currentStep === totalSteps) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-block';
+                updateReviewSection();
+            } else {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+
+        // Navigate to the previous step
+        function prevStep() {
+            document.getElementById(`step${currentStep}`).style.display = 'none';
+            currentStep--;
+            document.getElementById(`step${currentStep}`).style.display = 'block';
+
+            // Update navigation buttons
+            if (currentStep === 1) {
+                document.getElementById('prevBtn').style.display = 'none';
+            }
+            
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            document.getElementById('submitBtn').style.display = 'none';
+        }
+
+        // Validate the current step before proceeding
+        function validateStep(step) {
+            const form = document.getElementById('loanApplicationForm');
+            let isValid = true;
+
+            if (step === 1) {
+                if (!form.amount.value || !form.duration.value || !form.purpose.value || !form.description.value) {
+                    alert('Please fill in all required fields in Step 1');
+                    isValid = false;
+                }
+            } else if (step === 2) {
+                if (!form.annual_income.value) {
+                    alert('Please provide your annual income');
+                    isValid = false;
+                } else if (!form.repayment_plan.value) {
+                    alert('Please select a repayment plan');
+                    isValid = false;
+                }
+            } else if (step === 3) {
+                if (!form.id_document.files.length) {
+                    alert('Please upload your government issued ID');
+                    isValid = false;
+                } else if (!form.proof_document.files.length) {
+                    alert('Please upload proof of agricultural activity');
+                    isValid = false;
+                } else if (parseInt(form.amount.value) > 200000 && !form.collateral_document.files.length) {
+                    alert('For loans above ₦200,000, collateral documentation is required');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        // Update the review section with entered data
+        function updateReviewSection() {
+            const form = document.getElementById('loanApplicationForm');
+            
+            document.getElementById('reviewAmount').textContent = `₦${parseInt(form.amount.value).toLocaleString()}`;
+            document.getElementById('reviewDuration').textContent = `${form.duration.value} months`;
+            
+            const purposeSelect = form.purpose;
+            const purposeText = purposeSelect.options[purposeSelect.selectedIndex].text;
+            document.getElementById('reviewPurpose').textContent = purposeText;
+            
+            document.getElementById('reviewDescription').textContent = form.description.value;
+            document.getElementById('reviewIncome').textContent = `₦${parseInt(form.annual_income.value).toLocaleString()}`;
+            document.getElementById('reviewDebts').textContent = `₦${parseInt(form.existing_debts.value).toLocaleString()}`;
+            
+            if (form.collateral_type.value) {
+                const collateralSelect = form.collateral_type;
+                const collateralText = collateralSelect.options[collateralSelect.selectedIndex].text;
+                document.getElementById('reviewCollateral').textContent = `${collateralText} (₦${parseInt(form.collateral_value.value).toLocaleString()})`;
+            } else {
+                document.getElementById('reviewCollateral').textContent = 'None';
+            }
+            
+            const repaymentSelect = form.repayment_plan;
+            const repaymentText = repaymentSelect.options[repaymentSelect.selectedIndex].text;
+            document.getElementById('reviewRepayment').textContent = repaymentText;
+        }
+
+        // Submit the loan application
+        function submitLoanApplication() {
+            if (!document.getElementById('termsAgreement').checked) {
+                alert('You must agree to the terms and conditions before submitting');
+                return;
+            }
+
+            // Here you would typically send the form data to the server
+            // For this example, we'll just show a success message
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('newLoanModal'));
+            modal.hide();
+            
+            alert('Your loan application has been submitted successfully! You will receive a notification once it has been reviewed.');
+            
+            // In a real application, you would reload the loan applications list
+            // or redirect to a confirmation page
+        }
+
+        // Calculate loan details
+        function calculateLoan() {
+            const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const duration = parseInt(document.getElementById('loanDuration').value) || 12;
+            const rate = parseFloat(document.getElementById('interestRate').value) || 8;
+            
+            const monthlyRate = rate / 100 / 12;
+            const totalPayments = duration;
+            
+            // Calculate monthly payment
+            const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / 
+                                 (Math.pow(1 + monthlyRate, totalPayments) - 1);
+            
+            // Calculate total interest
+            const totalInterest = monthlyPayment * totalPayments - amount;
+            
+            // Calculate total repayment
+            const totalRepayment = amount + totalInterest;
+            
+            // Update the display
+            document.getElementById('monthlyPayment').textContent = `₦${monthlyPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            document.getElementById('totalInterest').textContent = `₦${totalInterest.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            document.getElementById('totalRepayment').textContent = `₦${totalRepayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+        }
+
+        // View loan details
+        function viewLoanDetails(loanId) {
+            // In a real application, this would fetch data from the server
+            // For this example, we'll use mock data
+            
+            let loanDetails = '';
+            
+            if (loanId === 'LA-2024-001') {
+                loanDetails = `
+                    <h5>Loan #LA-2024-001</h5>
+                    <p class="text-muted">Applied: June 20, 2024 | Status: <span class="badge bg-warning">Pending</span></p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Loan Details</h6>
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-5">Amount:</dt>
+                                        <dd class="col-sm-7">₦300,000</dd>
+                                        
+                                        <dt class="col-sm-5">Duration:</dt>
+                                        <dd class="col-sm-7">12 months</dd>
+                                        
+                                        <dt class="col-sm-5">Interest Rate:</dt>
+                                        <dd class="col-sm-7">8% p.a.</dd>
+                                        
+                                        <dt class="col-sm-5">Purpose:</dt>
+                                        <dd class="col-sm-7">Equipment Purchase - Irrigation System</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Application Progress</h6>
+                                    <div class="progress mb-2">
+                                        <div class="progress-bar bg-warning" style="width: 25%"></div>
+                                    </div>
+                                    <small class="text-muted">Under Review</small>
+                                    
+                                    <div class="mt-3">
+                                        <small class="text-muted">Next Step:</small>
+                                        <p class="mb-0">Document verification by loan officer</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Your loan application is currently under review. You will be notified once a decision has been made.
+                        The typical review process takes 3-5 business days.
+                    </div>
+                `;
+            } else if (loanId === 'LA-2024-002') {
+                loanDetails = `
+                    <h5>Loan #LA-2024-002</h5>
+                    <p class="text-muted">Applied: June 15, 2024 | Status: <span class="badge bg-success">Approved & Disbursed</span></p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Loan Details</h6>
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-5">Amount:</dt>
+                                        <dd class="col-sm-7">₦200,000</dd>
+                                        
+                                        <dt class="col-sm-5">Duration:</dt>
+                                        <dd class="col-sm-7">6 months</dd>
+                                        
+                                        <dt class="col-sm-5">Interest Rate:</dt>
+                                        <dd class="col-sm-7">6% p.a.</dd>
+                                        
+                                        <dt class="col-sm-5">Purpose:</dt>
+                                        <dd class="col-sm-7">Seeds and Fertilizer Purchase</dd>
+                                        
+                                        <dt class="col-sm-5">Disbursed On:</dt>
+                                        <dd class="col-sm-7">June 18, 2024</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Repayment Summary</h6>
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-5">Monthly Payment:</dt>
+                                        <dd class="col-sm-7">₦34,433</dd>
+                                        
+                                        <dt class="col-sm-5">Total Interest:</dt>
+                                        <dd class="col-sm-7">₦6,600</dd>
+                                        
+                                        <dt class="col-sm-5">Next Payment Due:</dt>
+                                        <dd class="col-sm-7">July 18, 2024</dd>
+                                    </dl>
+                                    
+                                    <div class="mt-3">
+                                        <button class="btn btn-sm btn-success" onclick="viewRepaymentSchedule('${loanId}')">
+                                            <i class="fas fa-calendar me-1"></i>View Full Schedule
+                                        </button>
+                                        <button class="btn btn-sm btn-primary ms-2">
+                                            <i class="fas fa-money-bill-wave me-1"></i>Make Payment
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Your loan was successfully disbursed on June 18, 2024. The first repayment is due on July 18, 2024.
+                    </div>
+                `;
+            } else if (loanId === 'LA-2024-003') {
+                loanDetails = `
+                    <h5>Loan #LA-2024-003</h5>
+                    <p class="text-muted">Applied: June 10, 2024 | Status: <span class="badge bg-danger">Rejected</span></p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Loan Details</h6>
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-5">Amount:</dt>
+                                        <dd class="col-sm-7">₦500,000</dd>
+                                        
+                                        <dt class="col-sm-5">Duration:</dt>
+                                        <dd class="col-sm-7">24 months</dd>
+                                        
+                                        <dt class="col-sm-5">Interest Rate:</dt>
+                                        <dd class="col-sm-7">10% p.a.</dd>
+                                        
+                                        <dt class="col-sm-5">Purpose:</dt>
+                                        <dd class="col-sm-7">Land Expansion</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Rejection Details</h6>
+                                    <div class="alert alert-danger">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        <strong>Reason:</strong> Insufficient collateral documentation
+                                    </div>
+                                    
+                                    <p>Our loan officer reviewed your application and found that the collateral documentation provided was insufficient for the requested loan amount.</p>
+                                    
+                                    <div class="mt-3">
+                                        <button class="btn btn-sm btn-warning" onclick="reapplyLoan('${loanId}')">
+                                            <i class="fas fa-redo me-1"></i>Reapply with Additional Documents
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        You may reapply for this loan by providing additional documentation. Please ensure all required collateral documents are included in your new application.
+                    </div>
+                `;
+            }
+            
+            document.getElementById('loanDetailsContent').innerHTML = loanDetails;
+            const modal = new bootstrap.Modal(document.getElementById('loanDetailsModal'));
+            modal.show();
+        }
+
+        // View repayment schedule
+        function viewRepaymentSchedule(loanId) {
+            // In a real application, this would fetch data from the server
+            // For this example, we'll use mock data
+            
+            let scheduleRows = '';
+            
+            if (loanId === 'LA-2024-002') {
+                const dueDates = ['July 18, 2024', 'August 18, 2024', 'September 18, 2024', 
+                                 'October 18, 2024', 'November 18, 2024', 'December 18, 2024'];
+                
+                dueDates.forEach((date, index) => {
+                    const isFirst = index === 0;
+                    const isLast = index === dueDates.length - 1;
+                    
+                    scheduleRows += `
+                        <tr>
+                            <td>${date}</td>
+                            <td>₦34,433</td>
+                            <td>${isLast ? '₦33,833' : '₦32,833'}</td>
+                            <td>${isLast ? '₦600' : '₦1,600'}</td>
+                            <td><span class="badge bg-secondary">Pending</span></td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            document.getElementById('repaymentScheduleBody').innerHTML = scheduleRows;
+            const modal = new bootstrap.Modal(document.getElementById('repaymentModal'));
+            modal.show();
+        }
+
+        // Print repayment schedule
+        function printRepaymentSchedule() {
+            // In a real application, this would open a print dialog with a nicely formatted version
+            window.print();
+        }
+
+        // Reapply for a rejected loan
+        function reapplyLoan(loanId) {
+            // In a real application, this would pre-fill the form with the previous application data
+            // For this example, we'll just show the new loan form
+            
+            const loanModal = bootstrap.Modal.getInstance(document.getElementById('loanDetailsModal'));
+            loanModal.hide();
+            
+            showNewLoanForm();
+            
+            // You could pre-fill the form here based on the loanId
+            if (loanId === 'LA-2024-003') {
+                const form = document.getElementById('loanApplicationForm');
+                form.amount.value = '500000';
+                form.duration.value = '24';
+                form.purpose.value = 'land';
+                form.description.value = 'Land Expansion - Additional documentation provided';
+                
+                // Show a message about the reapplication
+                alert('Please ensure you include all required collateral documentation for this reapplication.');
+            }
+        }
+
+        // Initialize file upload previews
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up file input change handlers
+            ['id_document', 'proof_document', 'collateral_document', 'other_document'].forEach(name => {
+                const input = document.querySelector(`input[name="${name}"]`);
+                input.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const previewDiv = document.getElementById(`${name.split('_')[0]}Preview`);
+                        const file = this.files[0];
+                        
+                        previewDiv.innerHTML = `
+                            <div class="uploaded-file">
+                                <i class="fas fa-file-pdf text-danger me-2"></i>
+                                <div class="flex-grow-1">
+                                    <small class="d-block">${file.name}</small>
+                                    <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeUpload('${name}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        `;
+                    }
+                });
+            });
+            
+            // Initialize loan calculator
+            calculateLoan();
+        });
+
+        // Remove an uploaded file
+        function removeUpload(name) {
+            const input = document.querySelector(`input[name="${name}"]`);
+            input.value = '';
+            document.getElementById(`${name.split('_')[0]}Preview`).innerHTML = '';
+        }
+
+        // Set up drag and drop for file uploads
+        ['idUpload', 'proofUpload', 'collateralUpload', 'otherUpload'].forEach(id => {
+            const uploadDiv = document.getElementById(id);
+            const inputName = id.replace('Upload', '_document');
+            
+            uploadDiv.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+            
+            uploadDiv.addEventListener('dragleave', function() {
+                this.classList.remove('dragover');
+            });
+            
+            uploadDiv.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                
+                const input = document.querySelector(`input[name="${inputName}"]`);
+                if (e.dataTransfer.files.length) {
+                    input.files = e.dataTransfer.files;
+                    const event = new Event('change');
+                    input.dispatchEvent(event);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+                                    
